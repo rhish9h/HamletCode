@@ -1,0 +1,40 @@
+Contributions of SER502 Spring 2023 Team 3 members
+
+Members:
+
+Akshata Bharadwaj 	- akodagnu
+Rhishabh Hattarki	- rhattark
+Anmol More 		    - amore9
+Akansh Kumar 	    - akuma352
+Manoj Dara 		    - mdara1
+
+--------------------------------------------------------------------------------
+
+Milestone 1:
+
+All the below tasks were done together as a group in multiple sittings:
+- GitHub setup
+- Project structure
+- Brainstorming for names and language ideas
+- Language design
+- Language grammar
+
+Individual Contributions/task division for Milestone 1:
+*The division was done based on language constraints*
+Akshata Bharadwaj 	- print for different datatypes
+Rhishabh Hattarki	- operators and primitive types
+Anmol More 		    - ternary operator and if-then-else
+Akansh Kumar 	    - assignment operator
+Manoj Dara 		    - for, while and for i in range
+
+--------------------------------------------------------------------------------
+
+Contribution plan for Milestone 2:
+
+- Convert grammar to DCG
+- Read from program file and tokenize
+- Use DCG and get parse tree
+- Use parse tree and evaluate
+- Documentation
+- Video
+- Quality
