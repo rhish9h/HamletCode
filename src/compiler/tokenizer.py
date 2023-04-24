@@ -1,4 +1,4 @@
-# from file_parser import File_parser
+from file_parser import File_parser
 import re
 
 class Tokenizer:
@@ -10,8 +10,6 @@ class Tokenizer:
     program = ""
 
     def __init__(self, ip_program):
-        # parser = File_parser(ip_program)
-        # self.program = parser.parse()
         self.program = ip_program
 
     def tokenize(self):
@@ -54,33 +52,11 @@ class Tokenizer:
 
 
 # Example usage
-program = '''
-act
-  scene
-    let numeral a be 10.
-    let verse b be "Hello world".
-    let bool c be a > 5.
-    sayeth a.
-    sayeth b.
-    sayeth c.
-    if it be c then thee shall
-      sayeth "The condition is true".
-    otherwise
-      sayeth "The condition is false".
-  end scene
-  scene
-    forsooth, let i be 1 to 5 by step size of 1. doth
-      sayeth i.
-  end scene
-  scene
-    whilst it be i <= 5 doth
-      sayeth i.
-      let i be i + 1.
-  end scene
-end act
-'''
+program = ''''''
+parser = File_parser ('data\example.hamlet')
+# data/example.hamlet
+tokenizer = Tokenizer(parser.parse())
 
-tokenizer = Tokenizer(program)
 tokens = tokenizer.tokenize()
 
 
