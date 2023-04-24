@@ -1,0 +1,77 @@
+:-table  arithmetic_expression/2. 
+:-table  arithmetic_term/2. 
+program --> act_declaration.
+
+act_declaration --> [act], scene_declaration, [end, act].
+
+scene_declaration --> [scene], statement_list, [end, scene].
+
+statement_list --> statement.
+statement_list --> statement, statement_list.
+statement_list --> scene_declaration.
+
+statement --> variable_declaration
+           | assignment
+           | print
+           | conditional
+           | ternary
+           | traditional_for
+           | traditional_while
+           | range_for.
+
+variable_declaration --> datatype, identifier, [be], expression, ['.'].
+
+assignment --> identifier, [be], expression, ['.'].
+
+datatype --> [numeral] | [verse] | [bool].
+
+expression --> arithmetic_expression | boolean_expression.
+
+arithmetic_expression --> arithmetic_term.
+arithmetic_expression --> arithmetic_expression, add_sub_operator, arithmetic_term.
+
+arithmetic_term --> arithmetic_factor.
+arithmetic_term --> arithmetic_term, mul_div_operator, arithmetic_factor.
+
+arithmetic_factor --> identifier
+                   | number
+                   | ['('], arithmetic_expression, [')'].
+
+boolean_expression --> arithmetic_expression, comparison_operator, arithmetic_expression.
+boolean_expression --> bool_literal.
+boolean_expression --> ['('], boolean_expression, [')'].
+
+bool_literal --> [aye] | [nay].
+
+print --> [sayeth], (identifier | string | bool_literal), ['.'].
+
+conditional --> [if, it, be], boolean_expression, [then, thee, shall], scene_declaration, [otherwise], scene_declaration, ['.'].
+
+ternary --> boolean_expression, ['?'], statement_list, [':'], statement_list, ['.'].
+
+traditional_for --> [forsooth], (assignment | variable_declaration), ['.'], boolean_expression, ['.'], assignment, [doth], scene_declaration, ['.'].
+
+traditional_while --> [whilst, it, be], boolean_expression, [doth], scene_declaration, ['.'].
+
+range_for --> [forsooth,',', let], identifier, [be], number, [to], number, [by, step, size, of], number, ['.'], [doth], scene_declaration, ['.'].
+
+identifier --> letter.
+identifier --> letter, identifier.
+
+number --> digit.
+number --> digit, number.
+
+string --> ['"'], letters_or_digit, ['"'] | [']'].
+
+letters_or_digit --> letter | digit.
+letters_or_digit --> letter, letters_or_digit.
+letters_or_digit --> digit, letters_or_digit.
+
+add_sub_operator --> ['+'] | ['-'].
+mul_div_operator --> ['*'] | ['/'].
+comparison_operator --> ['<'] | ['>'] | ['<='] | ['>='] | ['=='].
+
+
+letter --> ['a'] | ['b'] | ['c'] | ['d'] | ['e'] | ['f'] | ['g'] | ['h'] | ['i'] | ['j'] | ['k'] | ['l'] | ['m'] | ['n'] | ['o'] | ['p'] | ['q'] | ['r'] | ['s'] | ['t'] | ['u'] | ['v'] | ['w'] | [x] | ['y'] | ['z'] | ['A'] | ['B'] | ['C'] | ['D'] | ['E'] | ['F'] | ['G'] | ['H'] | ['I'] | ['J'] | ['K'] | ['L'] | ['M'] | ['N'] | ['O'] | ['P'] | ['Q'] | ['R'] | ['S'] | ['T'] | ['U'] | ['V'] | ['W'] | ['X'] | ['Y'] | ['Z'].
+
+digit --> ['0'] | ['1'] | ['2'] | ['3'] | ['4'] | ['5'] | ['6'] | ['7'] | ['8'] | ['9'].
