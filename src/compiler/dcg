@@ -1,5 +1,3 @@
-:-table  arithmetic_expression/2. 
-:-table  arithmetic_term/2. 
 program --> act_declaration.
 
 act_declaration --> [act], scene_declaration, [end, act].
@@ -19,7 +17,7 @@ statement --> variable_declaration
            | traditional_while
            | range_for.
 
-variable_declaration --> datatype, identifier, [be], expression, ['.'].
+variable_declaration --> [let], datatype, identifier, [be], expression, ['.'].
 
 assignment --> identifier, [be], expression, ['.'].
 
@@ -27,11 +25,11 @@ datatype --> [numeral] | [verse] | [bool].
 
 expression --> arithmetic_expression | boolean_expression.
 
+arithmetic_expression --> arithmetic_term, add_sub_operator, arithmetic_expression.
 arithmetic_expression --> arithmetic_term.
-arithmetic_expression --> arithmetic_expression, add_sub_operator, arithmetic_term.
 
+arithmetic_term --> arithmetic_factor, mul_div_operator, arithmetic_term.
 arithmetic_term --> arithmetic_factor.
-arithmetic_term --> arithmetic_term, mul_div_operator, arithmetic_factor.
 
 arithmetic_factor --> identifier
                    | number
@@ -67,11 +65,10 @@ letters_or_digit --> letter | digit.
 letters_or_digit --> letter, letters_or_digit.
 letters_or_digit --> digit, letters_or_digit.
 
-add_sub_operator --> ['+'] | ['-'].
-mul_div_operator --> ['*'] | ['/'].
-comparison_operator --> ['<'] | ['>'] | ['<='] | ['>='] | ['=='].
+add_sub_operator --> [+] | [-].
+mul_div_operator --> [*] | [/].
+comparison_operator --> [<] | [>] | [<=] | [>=] | [==].
 
+letter --> [a] | [b] | [c] | [d] | [e] | [f] | [g] | [h] | [i] | [j] | [k] | [l] | [m] | [n] | [o] | [p] | [q] | [r] | [s] | [t] | [u] | [v] | [w] | [x] | [y] | [z].
 
-letter --> ['a'] | ['b'] | ['c'] | ['d'] | ['e'] | ['f'] | ['g'] | ['h'] | ['i'] | ['j'] | ['k'] | ['l'] | ['m'] | ['n'] | ['o'] | ['p'] | ['q'] | ['r'] | ['s'] | ['t'] | ['u'] | ['v'] | ['w'] | [x] | ['y'] | ['z'] | ['A'] | ['B'] | ['C'] | ['D'] | ['E'] | ['F'] | ['G'] | ['H'] | ['I'] | ['J'] | ['K'] | ['L'] | ['M'] | ['N'] | ['O'] | ['P'] | ['Q'] | ['R'] | ['S'] | ['T'] | ['U'] | ['V'] | ['W'] | ['X'] | ['Y'] | ['Z'].
-
-digit --> ['0'] | ['1'] | ['2'] | ['3'] | ['4'] | ['5'] | ['6'] | ['7'] | ['8'] | ['9'].
+digit --> [0] | [1] | [2] | [3] | [4] | [5] | [6] | [7] | [8] | [9].
