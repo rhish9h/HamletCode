@@ -1,8 +1,8 @@
 program --> act_declaration.
 
-act_declaration --> [act], scene_declaration, [end] , [act].
+act_declaration --> [act], scene_declaration, [end, act].
 
-scene_declaration --> [scene], statement_list, [end], [scene].
+scene_declaration --> [scene], statement_list, [end, scene].
 
 statement_list --> statement.
 statement_list --> statement, statement_list.
@@ -17,9 +17,8 @@ statement --> variable_declaration
            | traditional_while
            | range_for.
 
-variable_declaration --> [let], datatype, assignment.
+variable_declaration --> [let], datatype, identifier, [be], expression, ['.'].
 
-assignment --> identifier, [be], string, ['.'].
 assignment --> identifier, [be], expression, ['.'].
 
 datatype --> [numeral] | [verse] | [bool].
@@ -60,7 +59,7 @@ identifier --> letter, identifier.
 number --> digit.
 number --> digit, number.
 
-string --> [~], letters_or_digit, [~].
+string --> ['"'], letters_or_digit, ['"'] | [']'].
 
 letters_or_digit --> letter | digit.
 letters_or_digit --> letter, letters_or_digit.
