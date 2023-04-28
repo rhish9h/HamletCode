@@ -26,11 +26,12 @@ datatype --> [numeral] | [verse] | [bool].
 
 expression --> arithmetic_expression | boolean_expression.
 
-arithmetic_expression --> arithmetic_term, add_sub_operator, arithmetic_expression.
 arithmetic_expression --> arithmetic_term.
+arithmetic_expression --> arithmetic_term, add_sub_operator, arithmetic_expression.
 
-arithmetic_term --> arithmetic_factor, mul_div_operator, arithmetic_term.
+
 arithmetic_term --> arithmetic_factor.
+arithmetic_term --> arithmetic_factor, mul_div_operator, arithmetic_term.
 
 arithmetic_factor --> identifier
                    | number
