@@ -56,7 +56,7 @@ class Tokenizer:
 
 # Example usage
 program = ''''''
-parser = File_parser ('data/example.hamlet')
+parser = File_parser (input())
 # data/example.hamlet
 tokenizer = Tokenizer(parser.parse())
 
