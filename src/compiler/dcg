@@ -47,7 +47,7 @@ bool_literal --> [aye] | [nay].
 
 print --> [sayeth], (identifier | string | bool_literal), ['.'].
 
-conditional --> [if, it, be], boolean_expression, [then, thee, shall], statement_list, [otherwise], statement_list, ['.'].
+conditional --> [if, it, be], boolean_expression, [then, thee, shall], statement_list, [otherwise], statement_list, [end, if].
 
 ternary --> boolean_expression, ['?'], statement_list, [':'], statement_list, ['.'].
 
