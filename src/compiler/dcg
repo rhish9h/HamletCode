@@ -54,17 +54,19 @@ traditional_while --> [whilst, it, be], boolean_expression, [doth], scene_declar
 
 range_for --> [forsooth,',', let], identifier, [be], number, [to], number, [by, step, size, of], number, ['.'], [doth], scene_declaration, ['.'].
 
-identifier --> letter.
-identifier --> letter, identifier.
-
+identifier --> my_string.
+number --> [].
 number --> digit.
 number --> digit, number.
 
-string --> [~], letters_or_digit, [~].
-
-letters_or_digit --> letter | digit.
-letters_or_digit --> letter, letters_or_digit.
-letters_or_digit --> digit, letters_or_digit.
+string --> [~], char_seq, [~].
+string --> [~], number, [~].
+string --> [~], my_string, [~].
+char_seq --> [].
+char_seq --> letter.
+char_seq --> letter, char_seq.
+my_string --> char_seq,number,char_seq.
+my_string --> number,char_seq,number.
 
 add_sub_operator --> [+] | [-].
 mul_div_operator --> [*] | [/].
