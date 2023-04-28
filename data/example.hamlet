@@ -14,10 +14,12 @@ act
   scene
     forsooth, let i be 1 to 5 by step size of 1. doth
       sayeth i.
+    end for
   end scene
   scene
     whilst it be i <= 5 doth
       sayeth i.
       let i be i + 1.
+    end whilst
   end scene
 end act

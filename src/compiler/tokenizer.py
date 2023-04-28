@@ -3,7 +3,7 @@ import re
 
 class Tokenizer:
     tokens = []
-    keywords = ["act", "scene", "end", "numeral", "verse", "bool", "sayeth", "if", "then",
+    keywords = ["act", "scene", "end", "numeral", "verse", "bool", "sayeth", "if", "then", "for",
                 "otherwise", "forsooth", "doth", "whilst", "to", "by", "step", "size", "of", "let"]
     operators = ["+", "-", "*", "/", "<", ">", "<=", ">=", "=="]
     delimiters = [",", ".", "(", ")", ":", "?"]
@@ -28,7 +28,7 @@ class Tokenizer:
                 self.tokens.append(("OPERATOR", word))
             # Check for delimiters
             elif word in self.delimiters:
-                self.tokens.append(("DELIMITER", word))
+                self.tokens.append(("DELIMITER", f"'{word}'"))
             # Check for bool literals
             elif word == "aye" or word == "nay":
                 self.tokens.append(("BOOL_LITERAL", word))
