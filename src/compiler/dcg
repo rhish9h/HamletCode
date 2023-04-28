@@ -1,6 +1,9 @@
 program --> act_declaration.
 
-act_declaration --> [act], scene_declaration, [end] , [act].
+act_declaration --> [act], scene_list, [end] , [act].
+
+scene_list --> scene_declaration.
+scene_list --> scene_declaration, scene_list.
 
 scene_declaration --> [scene], statement_list, [end], [scene].
 
