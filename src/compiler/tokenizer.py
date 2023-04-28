@@ -14,7 +14,7 @@ class Tokenizer:
 
     def tokenize(self):
         # Split the input code by whitespace, new lines, digits, identifiers, strings, and new lines
-        tokens = re.findall(r'"[^"]*"|\b(?:act|scene|end|numeral|verse|bool|sayeth|if|then|otherwise|forsooth|doth|whilst|to|by|step|size|of|let|aye|nay)\b|[-+*/<>=]+|\w+|[.,():?]|[\n\r]+', self.program)
+        tokens = re.findall(r'~.*?~|\b(?:act|scene|end|numeral|verse|bool|sayeth|if|then|otherwise|forsooth|doth|whilst|to|by|step|size|of|let|aye|nay)\b|[-+*/<>=]+|\w+|[.,():?]|[\n\r]+', self.program)
 
         # Iterate through each word in the program
         for word in tokens:
@@ -34,16 +34,19 @@ class Tokenizer:
                 self.tokens.append(("BOOL_LITERAL", word))
             # Check for numbers
             elif re.match(r"^\d+$", word):
-                self.tokens.append(("NUMBER", word))
+                for ch in word:
+                    self.tokens.append(("NUMBER", ch))
+            # Check for strings
+            elif re.match(r'^\~[a-zA-Z0-9\s]+\~$', word):
+                for ch in word:
+                    self.tokens.append(("STRING", ch))
             # Check for identifiers
             elif re.match(r"^[a-zA-Z][a-zA-Z0-9]*$", word):
                 self.tokens.append(("IDENTIFIER", word))
-            # Check for strings
-            elif re.match(r'^\"[a-zA-Z0-9\s]+\"$', word):
-                self.tokens.append(("STRING", word))
             # Check for new lines
             elif word == "\n":
-                self.tokens.append(("NEWLINE", word))
+                # self.tokens.append(("NEWLINE", word))
+                pass
             # If none of the above, it's an invalid token
             else:
                 raise ValueError(f"Invalid token: {word}")
@@ -53,11 +56,13 @@ class Tokenizer:
 
 # Example usage
 program = ''''''
-parser = File_parser ('data\example.hamlet')
+parser = File_parser ('data/example.hamlet')
 # data/example.hamlet
 tokenizer = Tokenizer(parser.parse())
 
 tokens = tokenizer.tokenize()
 
+# Print below for debugging
+# [print ('(', type, token, ')') if (token != '') else print('', end='') for type, token in tokens]
 
-[print (f'({token[0]}, {token[1]})') for token in tokens]
+[print (token, end=', ') if (token != '') else print('', end='') for type, token in tokens]

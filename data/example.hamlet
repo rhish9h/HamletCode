@@ -1,15 +1,15 @@
 act
   scene
     let numeral a be 10.
-    let verse b be "Hello world".
+    let verse b be ~helloworld~.
     let bool c be a > 5.
     sayeth a.
     sayeth b.
     sayeth c.
     if it be c then thee shall
-      sayeth "The condition is true".
+      sayeth ~theconditionistrue~.
     otherwise
-      sayeth "The condition is false".
+      sayeth ~theconditionisfalse~.
   end scene
   scene
     forsooth, let i be 1 to 5 by step size of 1. doth
