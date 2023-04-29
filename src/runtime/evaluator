@@ -52,6 +52,37 @@ boolean_expression_eval(t_bool_lit(X), _, _, false):- bool_literal_eval(X, false
 % traditional_while_eval(t_while(M,N), Env, NewEnv):- boolean_expression_eval(M, Env, NewEnv1, true), 
     % statement_list_eval(N, NewEnv1, NewEnv2), traditional_while_eval(M,N, NewEnv2, NewEnv).
 
+
+% Test
+% string_eval(t_string(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char))))))), X).
+% X = "result".
+string_eval(t_string(A), Z_out) :-
+    my_string_eval(A, Z_out).
+
+% Test
+% my_string_eval(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char)))))), X).
+% X = "result".
+my_string_eval(t_str(X, Y), Z_out) :-
+    letter_eval(X, Letter_eval),
+    string_chars_eval(Y, String_eval),
+    string_concat(Letter_eval, String_eval, Z_out).
+
+% TODO:- test after digit eval is ready
+% my_string_eval(t_str(X, Y), Z_out) :-
+%     digit_eval(X, Letter_eval),
+%     string_chars_eval(Y, String_eval),
+%     string_concat(Letter_eval, String_eval, Z_out).
+
+% Test
+% string_chars_eval(t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char))))), X).
+% X = "esult".
+string_chars_eval(t_char, "").
+
+string_chars_eval(t_str_char(X,Y), Z_out) :-
+    letter_eval(X, Letter_eval),
+    string_chars_eval(Y, String_eval),
+    string_concat(Letter_eval, String_eval, Z_out).
+
 letter_eval(t_letter('a'), 'a').
 letter_eval(t_letter('b'), 'b').
 letter_eval(t_letter('c'), 'c').
