@@ -55,7 +55,7 @@ traditional_for(t_for(W,X,Y,Z)) --> [forsooth], (assignment(W) | variable_declar
 
 traditional_while(t_while(M,N)) --> [whilst, it, be], boolean_expression(M), [doth], statement_list(N), [end, whilst].
 
-range_for(t_range_for(A,B,C,D,E)) --> [forsooth,',', let], identifier(A), [be], number(B), [to], number(C), [by, step, size, of], number(D), ['.'], [doth], statement_list(E), [end, for].
+range_for(t_range_for(X,A,B,C,D,E)) --> [forsooth,',', let], datatype(X),identifier(A), [be], number(B), [to], number(C), [by, step, size, of], number(D), ['.'], [doth], statement_list(E), [end, for].
 
 identifier(t_identifier(X)) --> my_string(X).
 number(t_num) --> [].
