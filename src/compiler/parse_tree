@@ -78,6 +78,31 @@ comparison_operator(t_lte_op) --> [<=].
 comparison_operator(t_gte_op) --> [>=].
 comparison_operator(t_eq_op) --> [==].
 
-letter(t_letter(A)) --> [A], {atom(A)}.
+letter(t_letter('a'))-->['a'].
+letter(t_letter('b'))-->['b'].
+letter(t_letter('c'))-->['c'].
+letter(t_letter('d'))-->['d'].
+letter(t_letter('e'))-->['e'].
+letter(t_letter('f'))-->['f'].
+letter(t_letter('g'))-->['g'].
+letter(t_letter('h'))-->['h'].
+letter(t_letter('i'))-->['i'].
+letter(t_letter('j'))-->['j'].
+letter(t_letter('k'))-->['k'].
+letter(t_letter('l'))-->['l'].
+letter(t_letter('m'))-->['m'].
+letter(t_letter('n'))-->['n'].
+letter(t_letter('o'))-->['o'].
+letter(t_letter('p'))-->['p'].
+letter(t_letter('q'))-->['q'].
+letter(t_letter('r'))-->['r'].
+letter(t_letter('s'))-->['s'].
+letter(t_letter('t'))-->['t'].
+letter(t_letter('u'))-->['u'].
+letter(t_letter('v'))-->['v'].
+letter(t_letter('w'))-->['w'].
+letter(t_letter('x'))-->['x'].
+letter(t_letter('y'))-->['y'].
+letter(t_letter('z'))-->['z'].
 
 digit(t_digit(X)) --> [X], {integer(X)}.
