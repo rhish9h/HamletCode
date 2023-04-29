@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Get program file name as cli arg
+file_name=$1
+
+# Run tokenizer, get tokens
+tokens=$(python3 tokenizer.py $file_name)
+
+# Surround tokens with square brackets
+tokens_in_brackets="["$(echo -e "$tokens")"]"
+
+# Run the Prolog program dcg.
+parse_tree=$(swipl -s parse_tree -g "program(P,$tokens_in_brackets,[]),print(P)"  -t "halt")
+
+echo $parse_tree
+# echo $tokens_in_brackets
