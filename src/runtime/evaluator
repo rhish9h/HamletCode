@@ -1,0 +1,8 @@
+update(Var, Val, [], [(Var, Val)]).
+update(Var, Val, [(Var, _) | Env], [(Var,Val) | Env]).
+update(Var, Val, [(Var1, Val2) | L], [(Var1,Val2) | Env]):-
+    Var \= Var1,
+    update(Var,Val,L,Env).
+
+lookup(Var, [(Var, Val) | _], Val).
+lookup(Var, [_ | T], Val) :- lookup(Var, T, Val).
