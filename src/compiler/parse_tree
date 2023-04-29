@@ -41,6 +41,11 @@ arithmetic_factor(t_arith_factor(X)) --> identifier(X)
 
 boolean_expression(t_bool_lit(X)) --> bool_literal(X) | identifier(X) | comparison(X).
 boolean_expression(t_bool_expr(X)) --> ['('], boolean_expression(X), [')'].
+
+boolean_expression(t_bool_not(X)) --> ['not'], boolean_expression(X).
+boolean_expression(t_bool_and(X,Y)) --> bool_literal(X), ['and'], bool_literal(Y) | identifier(X), ['and'], identifier(Y).
+boolean_expression(t_bool_or(X,Y)) --> bool_literal(X), ['or'], bool_literal(Y) | identifier(X), ['or'], identifier(Y).
+
 comparison(t_comp(A,B,C)) --> arithmetic_expression(A), comparison_operator(B), arithmetic_expression(C).
 
 bool_literal(t_bool(A)) --> [aye],{A=aye} | [nay],{A=nay}.
