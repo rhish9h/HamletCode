@@ -1,0 +1,15 @@
+act
+  scene
+    let numeral n be 10.
+    let numeral a be 0.
+    let numeral b be 1.
+    let numeral i be 1.
+    whilst it be i <= n doth
+      let numeral next be a + b.
+      a be b.
+      b be next.
+      i be i + 1.
+    end whilst
+    sayeth a.
+  end scene
+end act
