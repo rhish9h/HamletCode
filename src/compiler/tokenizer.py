@@ -3,8 +3,8 @@ import re
 
 class Tokenizer:
     tokens = []
-    keywords = ["act", "scene", "end", "numeral", "verse", "bool", "sayeth", "if", "then", "for",
-                "otherwise", "forsooth", "doth", "whilst", "to", "by", "step", "size", "of", "let"]
+    keywords = ["act", "scene", "end", "numeral", "verse", "bool", "sayeth", "if", "then", "for", "it",
+                "otherwise", "forsooth", "doth", "whilst", "to", "by", "step", "size", "of", "let", "be"]
     operators = ["+", "-", "*", "/", "<", ">", "<=", ">=", "=="]
     delimiters = [",", ".", "(", ")", ":", "?"]
     program = ""
@@ -42,7 +42,8 @@ class Tokenizer:
                     self.tokens.append(("STRING", ch))
             # Check for identifiers
             elif re.match(r"^[a-zA-Z][a-zA-Z0-9]*$", word):
-                self.tokens.append(("IDENTIFIER", word))
+                for ch in word:
+                    self.tokens.append(("IDENTIFIER", ch))
             # Check for new lines
             elif word == "\n":
                 # self.tokens.append(("NEWLINE", word))
