@@ -55,7 +55,7 @@ traditional_for --> [forsooth], (assignment | variable_declaration), ['.'], bool
 
 traditional_while --> [whilst, it, be], boolean_expression, [doth], statement_list, [end, whilst].
 
-range_for --> [forsooth,',', let], identifier, [be], number, [to], number, [by, step, size, of], number, ['.'], [doth], statement_list, [end, for].
+range_for --> [forsooth,',', let], datatype, identifier, [be], number, [to], number, [by, step, size, of], number, ['.'], [doth], statement_list, [end, for].
 
 identifier --> my_string.
 number --> [].
