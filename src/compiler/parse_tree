@@ -1,0 +1,83 @@
+program(t_prog(X)) --> act_declaration(X).
+
+act_declaration(t_act(X)) --> [act], scene_list(X), [end] , [act].
+
+scene_list(t_single_scene_list(X)) --> scene_declaration(X).
+scene_list(t_multi_scene_list(X,Y)) --> scene_declaration(X), scene_list(Y).
+
+scene_declaration(t_scene(X)) --> [scene], statement_list(X), [end], [scene].
+
+statement_list(t_single_stmt_list(X)) --> statement(X).
+statement_list(t_multi_stmt_list(X,Y)) --> statement(X), statement_list(Y).
+statement_list(t_dec_stmt_list(X)) --> scene_declaration(X).
+
+statement(t_statement(X)) --> variable_declaration(X)
+           | assignment(X)
+           | print(X)
+           | conditional(X)
+           | ternary(X)
+           | traditional_for(X)
+           | traditional_while(X)
+           | range_for(X).
+
+variable_declaration(t_var_dec(X,Y)) --> [let], datatype(X), assignment(Y).
+
+assignment(t_assign(X,Y)) --> identifier(X), [be], string(Y), ['.'].
+assignment(t_assign(X,Y)) --> identifier(X), [be], expression(Y), ['.'].
+
+datatype(t_datatype(X)) --> [numeral],{X=numeral} | [verse],{X=verse} | [bool],{X=bool}.
+
+expression(t_expr(A)) --> arithmetic_expression(A) | boolean_expression(A).
+
+arithmetic_expression(t_arith_expr_opr(A,B,C)) --> arithmetic_term(A), add_sub_operator(B), arithmetic_expression(C).
+arithmetic_expression(t_arith_expr_term(A)) --> arithmetic_term(A).
+
+arithmetic_term(t_arith_term_opr(A,B,C)) --> arithmetic_factor(A), mul_div_operator(B), arithmetic_term(C).
+arithmetic_term(t_arith_term_fac(A)) --> arithmetic_factor(A).
+
+arithmetic_factor(t_arith_factor(X)) --> identifier(X)
+                   | number(X)
+                   | ['('], arithmetic_expression(X), [')'].
+
+boolean_expression(t_bool_lit(X)) --> bool_literal(X) | identifier(X) | comparison(X).
+boolean_expression(t_bool_expr(X)) --> ['('], boolean_expression(X), [')'].
+comparison(t_comp(A,B,C)) --> arithmetic_expression(A), comparison_operator(B), arithmetic_expression(C).
+
+bool_literal(t_bool(A)) --> [aye],{A=aye} | [nay],{A=nay}.
+
+print(t_print(X)) --> [sayeth], (identifier(X) | string(X) | bool_literal(X)), ['.'].
+
+conditional(t_cond(A,B,C)) --> [if, it, be], boolean_expression(A), [then, thee, shall], statement_list(B), [otherwise], statement_list(C), [end, if].
+
+ternary(t_tern(A,B,C)) --> boolean_expression(A), ['?'], statement_list(B), [':'], statement_list(C), ['.'].
+
+traditional_for(t_for(W,X,Y,Z)) --> [forsooth], (assignment(W) | variable_declaration(W)), ['.'], boolean_expression(X), ['.'], assignment(Y), [doth], statement_list(Z), [end, for].
+
+traditional_while(t_while(M,N)) --> [whilst, it, be], boolean_expression(M), [doth], statement_list(N), [end, whilst].
+
+range_for(t_range_for(A,B,C,D,E)) --> [forsooth,',', let], identifier(A), [be], number(B), [to], number(C), [by, step, size, of], number(D), ['.'], [doth], statement_list(E), [end, for].
+
+identifier(t_identifier(X)) --> my_string(X).
+number(t_num) --> [].
+number(t_num_dig(X)) --> digit(X).
+number(t_dig_num(X,Y)) --> digit(X), number(Y).
+
+string(A) --> [~], my_string(A), [~].
+my_string(t_str(X,Y)) --> (letter(X) | digit(X)), string_chars(Y).
+
+string_chars(t_char) --> [].
+string_chars(t_str_char(X,Y)) --> (letter(X) | digit(X)), string_chars(Y).
+
+add_sub_operator(t_add) --> [+].
+add_sub_operator(t_sub) --> [-].
+mul_div_operator(t_mul) --> [*].
+mul_div_operator(t_mul) --> [/].
+comparison_operator(t_ls_op) --> [<].
+comparison_operator(t_gt_op) --> [>].
+comparison_operator(t_lte_op) --> [<=].
+comparison_operator(t_gte_op) --> [>=].
+comparison_operator(t_eq_op) --> [==].
+
+letter(t_letter(A)) --> [A], {atom(A)}.
+
+digit(t_digit(X)) --> [X], {integer(X)}.
