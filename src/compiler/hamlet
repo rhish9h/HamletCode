@@ -10,6 +10,7 @@ tokens=$(python3 tokenizer.py $file_name)
 tokens_in_brackets="["$(echo -e "$tokens")"]"
 
 # Run the Prolog program dcg.
-# swipl -f dcg -g program $tokens_in_brackets []
+parse_tree=$(swipl -s parse_tree -g "program(P,$tokens_in_brackets,[]),print(P)"  -t "halt")
 
+echo $parse_tree
 # echo $tokens_in_brackets
