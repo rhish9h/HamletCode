@@ -39,7 +39,10 @@ identifier_eval(t_identifier(X), Env, Value) :-
 % statement_list_eval(t_multi_stmt_list(X,Y), Env, NewEnv) --> statement_eval(X, Env, NewEnv1), statement_list_eval(Y, NewEnv1, NewEnv).
 % statement_list_eval(t_dec_stmt_list(X), Env, NewEnv) --> scene_declaration_eval(X, Env, NewEnv).
 
-% statement_eval(t_statement(X), Env, NewEnv):- print_eval(X, Env, NewEnv).
+% Test
+% statement_eval( t_statement(t_print(t_identifier(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char))))))))) , [("result" ,12 )] , X ).
+% 12
+statement_eval(t_statement(X), Env, Env):- print_eval(X,Env).
 % statement_eval(t_statement(X), Env, NewEnv):- conditional_eval(X, Env, NewEnv).
 % statement_eval(t_statement(X), Env, NewEnv):- ternary_eval(X, Env, NewEnv).
 % statement_eval(t_statement(X), Env, NewEnv):- traditional_while_eval(X, Env, NewEnv).
