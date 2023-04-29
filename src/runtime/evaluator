@@ -14,6 +14,13 @@ lookup(Var, [_ | T], Val) :- lookup(Var, T, Val).
 % scene_list_eval(t_single_scene_list(X), Env, NewEnv):- scene_declaration(X, Env, NewEnv).
 % scene_list_eval(t_multi_scene_list(X,Y), Env, NewEnv):- scene_declaration(X, Env, NewEnv1), scene_list(Y, NewEnv1, NewEnv).
 
+% Test
+% scene_declaration_eval(t_scene(t_single_stmt_list( t_statement(t_print(t_identifier(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char))))))))))) , [("result" ,12 )] , X ).
+% 12
+% X = [("result", 12)] .
+scene_declaration_eval(t_scene(X) , Env , NewEnv) :- 
+    statement_list_eval(X , Env , NewEnv).
+
 % assignment_eval(t_assign(X,Y), Env, NewEnv):- identifier_eval(X), string_eval(Y), update(X,Y,Env, NewEnv).
 % assignment_eval(t_assign(X,Y), Env, NewEnv):- identifier_eval(X), expr_eval(Y), update(X,Y,Env, NewEnv).
 
