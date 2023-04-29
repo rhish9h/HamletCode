@@ -6,3 +6,14 @@ update(Var, Val, [(Var1, Val2) | L], [(Var1,Val2) | Env]):-
 
 lookup(Var, [(Var, Val) | _], Val).
 lookup(Var, [_ | T], Val) :- lookup(Var, T, Val).
+
+digit_eval(t_digit(0), 0).
+digit_eval(t_digit(1), 1).
+digit_eval(t_digit(2), 2).
+digit_eval(t_digit(3), 3).
+digit_eval(t_digit(4), 4).
+digit_eval(t_digit(5), 5).
+digit_eval(t_digit(6), 6).
+digit_eval(t_digit(7), 7).
+digit_eval(t_digit(8), 8).
+digit_eval(t_digit(9), 9).
