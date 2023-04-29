@@ -1,13 +1,13 @@
-  scene
-    let numeral a be 10.
-    let verse b be ~helloworld~.
-    let bool c be a > 5.
-    sayeth a.
-    sayeth b.
-    sayeth c.
-    if it be c then thee shall
-      sayeth ~theconditionistrue~.
-    otherwise
-      sayeth ~theconditionisfalse~.
-    end if
-  end scene
+scene
+  let numeral a be 10.
+  let verse b be ~helloworld~.
+  let bool c be a > 5.
+  sayeth a.
+  sayeth b.
+  sayeth c.
+  if it be c then thee shall
+    sayeth ~theconditionistrue~.
+  otherwise
+    sayeth ~theconditionisfalse~.
+  end if
+end scene

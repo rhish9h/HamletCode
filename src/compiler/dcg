@@ -41,6 +41,10 @@ arithmetic_factor --> identifier
 
 boolean_expression --> bool_literal | identifier | comparison.
 boolean_expression --> ['('], boolean_expression, [')'].
+boolean_expression --> ['not'], boolean_expression.
+boolean_expression --> bool_literal, ['and'], bool_literal | identifier, ['and'], identifier.
+boolean_expression --> bool_literal, ['or'], bool_literal | identifier, ['or'], identifier.
+
 comparison --> arithmetic_expression, comparison_operator, arithmetic_expression.
 
 bool_literal --> [aye] | [nay].
