@@ -17,7 +17,9 @@ lookup(Var, [_ | T], Val) :- lookup(Var, T, Val).
 % assignment_eval(t_assign(X,Y), Env, NewEnv):- identifier_eval(X), string_eval(Y), update(X,Y,Env, NewEnv).
 % assignment_eval(t_assign(X,Y), Env, NewEnv):- identifier_eval(X), expr_eval(Y), update(X,Y,Env, NewEnv).
 
-% identifier_eval(t_identifier(X), Env, NewEnv):-my_string_eval(X, Env, NewEnv).
+identifier_eval(t_identifier(X), Env, Value):-
+    my_string_eval(X, String_eval),
+    lookup(String_eval, Env, Value).
 
 % string_eval(t_string(A), Env, NewEnv):-my_string_eval(X, Env, NewEnv).
 
