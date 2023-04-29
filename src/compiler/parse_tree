@@ -67,7 +67,7 @@ number(t_num) --> [].
 number(t_num_dig(X)) --> digit(X).
 number(t_dig_num(X,Y)) --> digit(X), number(Y).
 
-string(A) --> [~], my_string(A), [~].
+string(t_string(A)) --> [~], my_string(A), [~].
 my_string(t_str(X,Y)) --> (letter(X) | digit(X)), string_chars(Y).
 
 string_chars(t_char) --> [].

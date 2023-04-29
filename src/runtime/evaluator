@@ -7,6 +7,26 @@ update(Var, Val, [(Var1, Val2) | L], [(Var1,Val2) | Env]):-
 lookup(Var, [(Var, Val) | _], Val).
 lookup(Var, [_ | T], Val) :- lookup(Var, T, Val).
 
+% program_eval(t_prog(X), Env, NewEnv):- act_eval(X, Env, NewEnv).
+
+% act_eval(t_act(X), Env, NewEnv):- scene_list_eval(X, Env, NewEnv).
+
+% scene_list_eval(t_single_scene_list(X), Env, NewEnv):- scene_declaration(X, Env, NewEnv).
+% scene_list_eval(t_multi_scene_list(X,Y), Env, NewEnv):- scene_declaration(X, Env, NewEnv1), scene_list(Y, NewEnv1, NewEnv).
+
+% assignment_eval(t_assign(X,Y), Env, NewEnv):- identifier_eval(X), string_eval(Y), update(X,Y,Env, NewEnv).
+% assignment_eval(t_assign(X,Y), Env, NewEnv):- identifier_eval(X), expr_eval(Y), update(X,Y,Env, NewEnv).
+
+% identifier_eval(t_identifier(X), Env, NewEnv):-my_string_eval(X, Env, NewEnv).
+
+% string_eval(t_string(A), Env, NewEnv):-my_string_eval(X, Env, NewEnv).
+
+% my_string_eval(t_str(X,Y), Env, NewEnv):- digit_eval(X), string_chars_eval(Y, Env, NewEnv).
+% TODO: my_string_eval for letter.
+
+% string_chars_eval(t_char, Env, Env).
+% string_chars_eval(t_str_char(X,Y), Env, NewEnv):-  digit_eval(X), string_chars_eval(Y, Env, NewEnv).
+
 digit_eval(t_digit(0), 0).
 digit_eval(t_digit(1), 1).
 digit_eval(t_digit(2), 2).
