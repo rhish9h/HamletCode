@@ -27,6 +27,33 @@ lookup(Var, [_ | T], Val) :- lookup(Var, T, Val).
 % string_chars_eval(t_char, Env, Env).
 % string_chars_eval(t_str_char(X,Y), Env, NewEnv):-  digit_eval(X), string_chars_eval(Y, Env, NewEnv).
 
+letter_eval(t_letter('a'), 'a').
+letter_eval(t_letter('b'), 'b').
+letter_eval(t_letter('c'), 'c').
+letter_eval(t_letter('d'), 'd').
+letter_eval(t_letter('e'), 'e').
+letter_eval(t_letter('f'), 'f').
+letter_eval(t_letter('g'), 'g').
+letter_eval(t_letter('h'), 'h').
+letter_eval(t_letter('i'), 'i').
+letter_eval(t_letter('j'), 'j').
+letter_eval(t_letter('k'), 'k').
+letter_eval(t_letter('l'), 'l').
+letter_eval(t_letter('m'), 'm').
+letter_eval(t_letter('n'), 'n').
+letter_eval(t_letter('o'), 'o').
+letter_eval(t_letter('p'), 'p').
+letter_eval(t_letter('q'), 'q').
+letter_eval(t_letter('r'), 'r').
+letter_eval(t_letter('s'), 's').
+letter_eval(t_letter('t'), 't').
+letter_eval(t_letter('u'), 'u').
+letter_eval(t_letter('v'), 'v').
+letter_eval(t_letter('w'), 'w').
+letter_eval(t_letter('x'), 'x').
+letter_eval(t_letter('y'), 'y').
+letter_eval(t_letter('z'), 'z').
+
 digit_eval(t_digit(0), 0).
 digit_eval(t_digit(1), 1).
 digit_eval(t_digit(2), 2).
