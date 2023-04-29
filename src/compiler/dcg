@@ -29,22 +29,19 @@ datatype --> [numeral] | [verse] | [bool].
 
 expression --> arithmetic_expression | boolean_expression.
 
-arithmetic_expression --> arithmetic_term.
 arithmetic_expression --> arithmetic_term, add_sub_operator, arithmetic_expression.
+arithmetic_expression --> arithmetic_term.
 
-
-arithmetic_term --> arithmetic_factor.
 arithmetic_term --> arithmetic_factor, mul_div_operator, arithmetic_term.
+arithmetic_term --> arithmetic_factor.
 
 arithmetic_factor --> identifier
                    | number
                    | ['('], arithmetic_expression, [')'].
 
-
-boolean_expression --> bool_literal.
-boolean_expression --> identifier.
-boolean_expression --> arithmetic_expression, comparison_operator, arithmetic_expression.
+boolean_expression --> bool_literal | identifier | comparison.
 boolean_expression --> ['('], boolean_expression, [')'].
+comparison --> arithmetic_expression, comparison_operator, arithmetic_expression.
 
 bool_literal --> [aye] | [nay].
 
@@ -65,14 +62,11 @@ number --> [].
 number --> digit.
 number --> digit, number.
 
-string --> [~], char_seq, [~].
-string --> [~], number, [~].
 string --> [~], my_string, [~].
-char_seq --> [].
-char_seq --> letter.
-char_seq --> letter, char_seq.
-my_string --> char_seq,number,char_seq.
-my_string --> number,char_seq,number.
+my_string --> (letter | digit), string_chars.
+
+string_chars --> [].
+string_chars --> (letter | digit), string_chars.
 
 add_sub_operator --> [+] | [-].
 mul_div_operator --> [*] | [/].
