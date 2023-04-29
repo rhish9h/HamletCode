@@ -1,5 +1,6 @@
 from file_parser import File_parser
 import re
+import sys
 
 class Tokenizer:
     tokens = []
@@ -57,7 +58,7 @@ class Tokenizer:
 
 # Example usage
 program = ''''''
-parser = File_parser (input())
+parser = File_parser (sys.argv[1])
 # data/example.hamlet
 tokenizer = Tokenizer(parser.parse())
 
@@ -66,4 +67,10 @@ tokens = tokenizer.tokenize()
 # Print below for debugging
 # [print ('(', type, token, ')') if (token != '') else print('', end='') for type, token in tokens]
 
-[print (token, end=', ') if (token != '') else print('', end='') for type, token in tokens]
+token_out = []
+
+for type, token in tokens:
+    if token != '':
+        token_out.append(token)
+
+print(','.join(token_out))
