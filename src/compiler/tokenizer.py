@@ -1,10 +1,11 @@
 from file_parser import File_parser
 import re
+import sys
 
 class Tokenizer:
     tokens = []
-    keywords = ["act", "scene", "end", "numeral", "verse", "bool", "sayeth", "if", "then", "for",
-                "otherwise", "forsooth", "doth", "whilst", "to", "by", "step", "size", "of", "let"]
+    keywords = ["act", "scene", "end", "numeral", "verse", "bool", "sayeth", "if", "then", "for", "it",
+                "otherwise", "forsooth", "doth", "whilst", "to", "by", "step", "size", "of", "let", "be"]
     operators = ["+", "-", "*", "/", "<", ">", "<=", ">=", "=="]
     delimiters = [",", ".", "(", ")", ":", "?"]
     program = ""
@@ -42,7 +43,8 @@ class Tokenizer:
                     self.tokens.append(("STRING", ch))
             # Check for identifiers
             elif re.match(r"^[a-zA-Z][a-zA-Z0-9]*$", word):
-                self.tokens.append(("IDENTIFIER", word))
+                for ch in word:
+                    self.tokens.append(("IDENTIFIER", ch))
             # Check for new lines
             elif word == "\n":
                 # self.tokens.append(("NEWLINE", word))
@@ -56,7 +58,7 @@ class Tokenizer:
 
 # Example usage
 program = ''''''
-parser = File_parser (input())
+parser = File_parser (sys.argv[1])
 # data/example.hamlet
 tokenizer = Tokenizer(parser.parse())
 
@@ -65,4 +67,10 @@ tokens = tokenizer.tokenize()
 # Print below for debugging
 # [print ('(', type, token, ')') if (token != '') else print('', end='') for type, token in tokens]
 
-[print (token, end=', ') if (token != '') else print('', end='') for type, token in tokens]
+token_out = []
+
+for type, token in tokens:
+    if token != '':
+        token_out.append(token)
+
+print(','.join(token_out))

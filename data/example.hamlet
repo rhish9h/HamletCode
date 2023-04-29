@@ -20,7 +20,7 @@ act
   scene
     whilst it be i <= 5 doth
       sayeth i.
-      let i be i + 1.
+      i be i + 1.
     end whilst
   end scene
 end act
