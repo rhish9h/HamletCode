@@ -1,0 +1,11 @@
+act
+  scene
+    let numeral n be 5.
+    let numeral result be 1.
+    forsooth, let numeral i be 1 to 15 by step size of 1.
+    doth
+      result be result * i.
+      sayeth result.
+    end for
+  end scene
+end act

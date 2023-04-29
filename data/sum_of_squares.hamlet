@@ -1,0 +1,10 @@
+act
+  scene
+    let numeral sum be 0.
+    forsooth, let numeral i be 1 to 10 by step size of 1. doth 
+      let numeral square be i * i.
+      let numeral sum be sum + square.
+      sayeth sum.
+    end for
+  end scene
+end act
