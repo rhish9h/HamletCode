@@ -110,4 +110,13 @@ letter(t_letter('x'))-->['x'].
 letter(t_letter('y'))-->['y'].
 letter(t_letter('z'))-->['z'].
 
-digit(t_digit(X)) --> [X], {integer(X)}.
+digit(t_digit(0)) --> [0].
+digit(t_digit(1)) --> [1].
+digit(t_digit(2)) --> [2].
+digit(t_digit(3)) --> [3].
+digit(t_digit(4)) --> [4].
+digit(t_digit(5)) --> [5].
+digit(t_digit(6)) --> [6].
+digit(t_digit(7)) --> [7].
+digit(t_digit(8)) --> [8].
+digit(t_digit(9)) --> [9].
