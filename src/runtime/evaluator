@@ -27,6 +27,31 @@ lookup(Var, [_ | T], Val) :- lookup(Var, T, Val).
 % string_chars_eval(t_char, Env, Env).
 % string_chars_eval(t_str_char(X,Y), Env, NewEnv):-  digit_eval(X), string_chars_eval(Y, Env, NewEnv).
 
+% statement_list_eval(t_single_stmt_list(X), Env, NewEnv) --> statement_eval(X, Env, NewEnv).
+% statement_list_eval(t_multi_stmt_list(X,Y), Env, NewEnv) --> statement_eval(X, Env, NewEnv1), statement_list_eval(Y, NewEnv1, NewEnv).
+% statement_list_eval(t_dec_stmt_list(X), Env, NewEnv) --> scene_declaration_eval(X, Env, NewEnv).
+
+% statement_eval(t_statement(X), Env, NewEnv):- print_eval(X, Env, NewEnv).
+% statement_eval(t_statement(X), Env, NewEnv):- conditional_eval(X, Env, NewEnv).
+% statement_eval(t_statement(X), Env, NewEnv):- ternary_eval(X, Env, NewEnv).
+% statement_eval(t_statement(X), Env, NewEnv):- traditional_while_eval(X, Env, NewEnv).
+
+bool_literal_eval(t_bool(aye),true).
+bool_literal_eval(t_bool(nay),false).
+
+boolean_expression_eval(t_bool_lit(X), _, _, true):- bool_literal_eval(X, true).
+boolean_expression_eval(t_bool_lit(X), _, _, false):- bool_literal_eval(X, false).
+
+% conditional_eval(t_cond(A,B,_), Env, NewEnv):- boolean_expression_eval(A, Env, NewEnv1, true), statement_list_eval(B, NewEnv1, NewEnv).
+% conditional_eval(t_cond(A,_,C), Env, NewEnv):- boolean_expression_eval(A, Env, NewEnv1, false), statement_list_eval(C, NewEnv1, NewEnv).
+
+% ternary_eval(t_tern(A,B,_), Env, NewEnv):- boolean_expression_eval(A, Env, NewEnv1, true), statement_list_eval(B, NewEnv1, NewEnv).
+% ternary_eval(t_tern(A,_,C), Env, NewEnv):- boolean_expression_eval(A, Env, NewEnv1, false), statement_list_eval(C, NewEnv1, NewEnv).
+
+% traditional_while_eval(t_while(M,_), Env, NewEnv):- boolean_expression_eval(M, Env, NewEnv, false).
+% traditional_while_eval(t_while(M,N), Env, NewEnv):- boolean_expression_eval(M, Env, NewEnv1, true), 
+    % statement_list_eval(N, NewEnv1, NewEnv2), traditional_while_eval(M,N, NewEnv2, NewEnv).
+
 letter_eval(t_letter('a'), 'a').
 letter_eval(t_letter('b'), 'b').
 letter_eval(t_letter('c'), 'c').
