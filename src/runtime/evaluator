@@ -42,6 +42,12 @@ print_eval(t_print(X), Env) :-
     identifier_eval(X, Env, Value),
     writeln(Value).
 
+% print_eval(t_print(t_string(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char)))))))), []).
+% result
+print_eval(t_print(X), _) :-
+    string_eval(X, Value),
+    writeln(Value).
+
 % Test
 % identifier_eval(t_identifier(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char))))))), Z).
 identifier_eval(t_identifier(X), Value) :-
