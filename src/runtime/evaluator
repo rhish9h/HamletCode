@@ -65,8 +65,12 @@ identifier_eval(t_identifier(X), Env, Value) :-
 % X = [("result", 12)] .
 statement_list_eval(t_single_stmt_list(X), Env, NewEnv) :-
     statement_eval(X, Env, NewEnv).
-
-% statement_list_eval(t_multi_stmt_list(X,Y), Env, NewEnv) --> statement_eval(X, Env, NewEnv1), statement_list_eval(Y, NewEnv1, NewEnv).
+% Test
+% statement_list_eval(t_multi_stmt_list(t_statement(t_print(t_string(t_str(t_letter(a),t_str_char(t_letter(b),t_str_char(t_letter(c),t_char)))))),t_single_stmt_list(t_statement(t_print(t_string(t_str(t_letter(b),t_str_char(t_letter(c),t_str_char(t_letter(d),t_char)))))))), [("result", 12)], X).
+%abc
+%bcd
+%X = [("result",12)]
+statement_list_eval(t_multi_stmt_list(X,Y), Env, NewEnv) :- statement_eval(X, Env, NewEnv1), statement_list_eval(Y, NewEnv1, NewEnv).
 % statement_list_eval(t_dec_stmt_list(X), Env, NewEnv) --> scene_declaration_eval(X, Env, NewEnv).
 
 % Test
