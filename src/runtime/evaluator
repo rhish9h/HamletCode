@@ -59,9 +59,13 @@ assignment_eval(t_assign(X,Y), Env, NewEnv, String_eval):-
     string_eval(Y, String_eval),
     update(Id_eval, String_eval, Env, NewEnv).
 
+% Test
+% assignment_eval(t_assign(t_identifier(t_str(t_letter(x),t_char)),t_expr(t_arith_expr_opr(t_arith_term_fac(t_arith_factor(t_dig_num(t_digit(2),t_num_dig(t_digit(1))))),t_add,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(4)))))))), [("x", 1)], NewEnv, Result).
+% NewEnv = [("x", 16)],
+% Result = 16 .
 assignment_eval(t_assign(X,Y), Env, NewEnv, Value):- 
     identifier_eval(X, Id_eval), 
-    % expression_eval(Y, Env, Value), 
+    expression_eval(Y, Env, Value), 
     update(Id_eval, Value, Env, NewEnv).
 
 % Test
