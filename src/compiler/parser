@@ -15,4 +15,3 @@ tokens_in_brackets="["$(echo -e "$tokens")"]"
 parse_tree=$(swipl -s ${cwd}/parse_tree -g "program(P,$tokens_in_brackets,[]),print(P)"  -t "halt")
 
 echo $parse_tree
-# echo $tokens_in_brackets
