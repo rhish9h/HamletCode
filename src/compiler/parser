@@ -8,6 +8,9 @@ file_name=$1
 # Run tokenizer, get tokens
 tokens=$(python ${cwd}/tokenizer.py $file_name)
 
+# If your machine uses python3 instead of python, uncomment below lin and comment above line
+# tokens=$(python3 ${cwd}/tokenizer.py $file_name)
+
 # Surround tokens with square brackets
 tokens_in_brackets="["$(echo -e "$tokens")"]"
 
