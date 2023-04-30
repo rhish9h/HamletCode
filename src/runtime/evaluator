@@ -135,10 +135,16 @@ boolean_expression_eval(t_bool_and(X,Y), _, false):- bool_literal_eval(X,true),b
 boolean_expression_eval(t_bool_and(X,Y), _, false):- bool_literal_eval(X,false),bool_literal_eval(Y,true).
 boolean_expression_eval(t_bool_and(X,Y), _, false):- bool_literal_eval(X,false),bool_literal_eval(Y,false).
 
-% boolean_expression_eval(t_bool_or(X,Y), _, true):- bool_literal_eval(X,true),bool_literal_eval(Y,true).
-% boolean_expression_eval(t_bool_or(X,Y), _, true):- bool_literal_eval(X,true),bool_literal_eval(Y,false).
-% boolean_expression_eval(t_bool_or(X,Y), _, true):- bool_literal_eval(X,false),bool_literal_eval(Y,true).
-% boolean_expression_eval(t_bool_or(X,Y), _, false):- bool_literal_eval(X,false),bool_literal_eval(Y,false).
+% boolean_expression_eval(t_bool_or(t_bool(nay),t_bool(aye)), [],X).
+% X = true.
+% boolean_expression_eval(t_bool_or(t_bool(nay),t_bool(nay)), [],X).
+% X = false .
+% boolean_expression_eval(t_bool_or(t_bool(aye),t_bool(nay)), [],X).
+% X = true.
+boolean_expression_eval(t_bool_or(X,Y), _, true):- bool_literal_eval(X,true),bool_literal_eval(Y,true).
+boolean_expression_eval(t_bool_or(X,Y), _, true):- bool_literal_eval(X,true),bool_literal_eval(Y,false).
+boolean_expression_eval(t_bool_or(X,Y), _, true):- bool_literal_eval(X,false),bool_literal_eval(Y,true).
+boolean_expression_eval(t_bool_or(X,Y), _, false):- bool_literal_eval(X,false),bool_literal_eval(Y,false).
 
 % boolean_expression_eval(t_bool_and(t_identifier(t_str(t_letter(x),t_char)),t_identifier(t_str(t_letter(y),t_char))) , [("x",2),("y",2) , ("i", 4)],X ). 
 % X = true .
