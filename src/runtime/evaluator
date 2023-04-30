@@ -37,7 +37,6 @@ scene_list_eval(t_multi_scene_list(X, Y), Env, NewEnv) :-
 scene_declaration_eval(t_scene(X) , Env , NewEnv) :- 
     statement_list_eval(X , Env , NewEnv).
 
-% TODO :- variable declaration for bool
 % t_var_dec(t_datatype(verse),t_assign(t_identifier(t_str(t_letter(x),t_char)),t_string(t_str(t_letter(h),t_str_char(t_letter(e),t_str_char(t_letter(l),t_str_char(t_letter(l),t_str_char(t_letter(o),t_char))))))))
 variable_declaration_eval(t_var_dec(X,Y), Env, NewEnv) :-
     datatype_eval(X, verse),
@@ -51,6 +50,11 @@ variable_declaration_eval(t_var_dec(X,Y), Env, NewEnv) :-
     datatype_eval(X, numeral),
     assignment_eval(Y, Env, NewEnv, Number_eval),
     number(Number_eval).
+
+variable_declaration_eval(t_var_dec(X,Y), Env, NewEnv) :-
+    datatype_eval(X, bool),
+    assignment_eval(Y, Env, NewEnv, Bool_eval),
+    boolean(Bool_eval).
 
 % Test
 % datatype_eval(t_datatype(numeral), X).
@@ -81,6 +85,11 @@ assignment_eval(t_assign(X,Y), Env, NewEnv, Value):-
 % R = 16 .
 expression_eval(t_expr(A), Env, Value) :-
     arithmetic_expression_eval(A, Env, Value).
+
+% expression_eval(t_expr(t_bool_lit(t_comp(t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(5))))),t_gt_op,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(3)))))))), [], R).
+% R = true .
+expression_eval(t_expr(A), Env, Value) :-
+    boolean_expression_eval(A, Env, Value).
 
 % Test
 % arithmetic_expression_eval(t_arith_expr_opr(t_arith_term_fac(t_arith_factor(t_dig_num(t_digit(2),t_num_dig(t_digit(1))))),t_add,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(4)))))), [], R).
@@ -156,6 +165,13 @@ print_eval(t_print(X), _) :-
     writeln(Value).
 
 % Test
+% print_eval(t_print(t_bool(aye)), []).                                                                                                         
+% true
+print_eval(t_print(X), _) :-
+    bool_literal_eval(X, Value),
+    writeln(Value).
+
+% Test
 % identifier_eval(t_identifier(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char))))))), Z).
 identifier_eval(t_identifier(X), Value) :-
     my_string_eval(X, Value).
@@ -178,6 +194,8 @@ statement_list_eval(t_single_stmt_list(X), Env, NewEnv) :-
 %bcd
 %X = [("result",12)]
 statement_list_eval(t_multi_stmt_list(X,Y), Env, NewEnv) :- statement_eval(X, Env, NewEnv1), statement_list_eval(Y, NewEnv1, NewEnv).
+
+% TODO: statement list for scene decl
 % statement_list_eval(t_dec_stmt_list(X), Env, NewEnv) --> scene_declaration_eval(X, Env, NewEnv).
 
 % Test
@@ -192,6 +210,15 @@ statement_eval(t_statement(X), Env, NewEnv):- traditional_while_eval(X, Env, New
 % statement_eval(t_statement(t_var_dec(t_datatype(numeral),t_assign(t_identifier(t_str(t_letter(x),t_char)),t_expr(t_arith_expr_opr(t_arith_term_fac(t_arith_factor(t_dig_num(t_digit(2),t_num_dig(t_digit(1))))),t_add,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(4)))))))))), [], New_env).
 % New_env = [("x", 16)] .
 statement_eval(t_statement(X), Env, New_env) :- variable_declaration_eval(X, Env, New_env).
+
+% Test
+% statement_eval(t_statement(t_assign(t_identifier(t_str(t_letter(x),t_char)),t_expr(t_bool_lit(t_comp(t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(5))))),t_gt_op,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(3)))))))))), [("x", false)], NewEnv).          
+% NewEnv = [("x", true)] .
+statement_eval(t_statement(X), Env, New_env) :- assignment_eval(X, Env, New_env, _).
+
+% TODO statement for for
+% TODO statement for while
+% TODO statement for range_for
 % statement_eval(t_statement(X), Env, NewEnv):- traditional_while_eval(X, Env, NewEnv).
 
 bool_literal_eval(t_bool(aye),true).
@@ -199,6 +226,17 @@ bool_literal_eval(t_bool(nay),false).
 
 boolean_expression_eval(t_bool_lit(X),  _, true):- bool_literal_eval(X, true).
 boolean_expression_eval(t_bool_lit(X),  _, false):- bool_literal_eval(X, false).
+
+boolean_expression_eval(t_bool_lit(X),  Env, true):- identifier_eval(X, Env, Val), Val=true.
+boolean_expression_eval(t_bool_lit(X),  Env, false):- identifier_eval(X, Env, Val), Val=false.
+
+% Test
+% boolean_expression_eval(t_bool_lit(t_comp(t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(5))))),t_gt_op,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(3))))))), [], R).
+% R = true .
+boolean_expression_eval(t_bool_lit(X), Env, Value) :-
+    comparison_eval(X, Env, Value).
+
+% TODO boolean expression with brackets
 
 % Test
 % boolean_expression_eval(t_bool_not(t_bool_lit(t_bool(nay))), [], X).
@@ -250,16 +288,24 @@ boolean_expression_eval(t_bool_and(X,Y), Env, false):-
 % boolean_expression_eval(t_bool_and(_,_), _, false).
 
 % Test
+% comparison_eval(t_comp(t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(5))))),t_gt_op,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(3)))))), [], R).
+% R = true .
+comparison_eval(t_comp(A,Cmp,C), Env, Value):- 
+    arithmetic_expression_eval(A, Env, First),
+    arithmetic_expression_eval(C, Env, Second),
+    comparison_operator_eval(Cmp, First, Second, Value).
+
+% Test
 % conditional_eval(t_cond(t_bool_lit(t_bool(nay)),t_single_stmt_list(t_statement(t_print(t_string(t_str(t_letter(t),t_str_char(t_letter(r),t_str_char(t_letter(u),t_str_char(t_letter(e),t_char)))))))),t_single_stmt_list(t_statement(t_print(t_string(t_str(t_letter(f),t_str_char(t_letter(a),t_str_char(t_letter(l),t_str_char(t_letter(s),t_str_char(t_letter(e),t_char)))))))))),[("result",12)],X).
 % false
-conditional_eval(t_cond(A,B,_), Env, NewEnv):- boolean_expression_eval(A, Env, NewEnv1, true), statement_list_eval(B, NewEnv1, NewEnv).
-conditional_eval(t_cond(A,_,C), Env, NewEnv):- boolean_expression_eval(A, Env, NewEnv1, false), statement_list_eval(C, NewEnv1, NewEnv).
+conditional_eval(t_cond(A,B,_), Env, NewEnv):- boolean_expression_eval(A, Env, true), statement_list_eval(B, Env, NewEnv).
+conditional_eval(t_cond(A,_,C), Env, NewEnv):- boolean_expression_eval(A, Env, false), statement_list_eval(C, Env, NewEnv).
 
 % Test
 % ternary_eval(t_tern(t_bool_lit(t_bool(aye)),t_single_stmt_list(t_statement(t_print(t_string(t_str(t_letter(t),t_str_char(t_letter(r),t_str_char(t_letter(u),t_str_char(t_letter(e),t_char)))))))),t_single_stmt_list(t_statement(t_print(t_string(t_str(t_letter(f),t_str_char(t_letter(a),t_str_char(t_letter(l),t_str_char(t_letter(s),t_str_char(t_letter(e),t_char)))))))))),[("result",12)],X).
 % true
-ternary_eval(t_tern(A,B,_), Env, NewEnv):- boolean_expression_eval(A, Env, NewEnv1, true), statement_list_eval(B, NewEnv1, NewEnv).
-ternary_eval(t_tern(A,_,C), Env, NewEnv):- boolean_expression_eval(A, Env, NewEnv1, false), statement_list_eval(C, NewEnv1, NewEnv).
+ternary_eval(t_tern(A,B,_), Env, NewEnv):- boolean_expression_eval(A, Env, true), statement_list_eval(B, Env, NewEnv).
+ternary_eval(t_tern(A,_,C), Env, NewEnv):- boolean_expression_eval(A, Env, false), statement_list_eval(C, Env, NewEnv).
 
 
 traditional_while_eval(t_while(M,_), Env, NewEnv):- boolean_expression_eval(M, Env, false).
@@ -280,12 +326,6 @@ my_string_eval(t_str(X, Y), Z_out) :-
     letter_eval(X, Letter_eval),
     string_chars_eval(Y, String_eval),
     string_concat(Letter_eval, String_eval, Z_out).
-
-% TODO:- test after digit eval is ready
-% my_string_eval(t_str(X, Y), Z_out) :-
-%     digit_eval(X, Letter_eval),
-%     string_chars_eval(Y, String_eval),
-%     string_concat(Letter_eval, String_eval, Z_out).
 
 % Test
 % string_chars_eval(t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char))))), X).
@@ -320,6 +360,17 @@ add_sub_op_eval(t_add, +).
 add_sub_op_eval(t_sub, -).
 mul_div_operator(t_mul, *).
 mul_div_operator(t_div, /).
+
+comparison_operator_eval(t_ls_op, Left, Right, true) :- Left < Right.
+comparison_operator_eval(t_ls_op, Left, Right, false) :- not(Left < Right).
+comparison_operator_eval(t_gt_op, Left, Right, true) :- Left > Right.
+comparison_operator_eval(t_gt_op, Left, Right, false) :- not(Left > Right).
+comparison_operator_eval(t_lte_op, Left, Right, true) :- Left =< Right.
+comparison_operator_eval(t_lte_op, Left, Right, false) :- not(Left =< Right).
+comparison_operator_eval(t_gte_op, Left, Right, true) :- Left >= Right.
+comparison_operator_eval(t_gte_op, Left, Right, false) :- not(Left >= Right).
+comparison_operator_eval(t_eq_op, Left, Right, true) :- Left == Right.
+comparison_operator_eval(t_eq_op, Left, Right, false) :- not(Left == Right).
 
 comparison_operator_eval(t_ls_op, <).
 comparison_operator_eval(t_gt_op, >).
@@ -364,3 +415,6 @@ digit_eval(t_digit(6), 6).
 digit_eval(t_digit(7), 7).
 digit_eval(t_digit(8), 8).
 digit_eval(t_digit(9), 9).
+
+boolean(true).
+boolean(false).
