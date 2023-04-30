@@ -83,6 +83,7 @@ Internally it will run the following programs
 <br>
 
 ## Important commands to run programs
+Note: It is recommended to use Git Bash for Windows
 <br>
 
 ### Compile and run the hamlet program code
