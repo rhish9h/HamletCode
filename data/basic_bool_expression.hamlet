@@ -1,5 +1,0 @@
-act
-    scene
-        let bool i be x and y.
-    end scene
-end act
