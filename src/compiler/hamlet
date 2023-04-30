@@ -6,7 +6,7 @@ cwd="$(dirname "$0")"
 file_name=$1
 
 # Run tokenizer, get tokens
-tokens=$(python3 ${cwd}/tokenizer.py $file_name)
+tokens=$(python ${cwd}/tokenizer.py $file_name)
 
 # Surround tokens with square brackets
 tokens_in_brackets="["$(echo -e "$tokens")"]"

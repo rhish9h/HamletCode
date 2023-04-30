@@ -186,6 +186,7 @@ statement_list_eval(t_multi_stmt_list(X,Y), Env, NewEnv) :- statement_eval(X, En
 statement_eval(t_statement(X), Env, Env):- print_eval(X,Env).
 statement_eval(t_statement(X), Env, NewEnv):- conditional_eval(X, Env, NewEnv).
 statement_eval(t_statement(X), Env, NewEnv):- ternary_eval(X, Env, NewEnv).
+statement_eval(t_statement(X), Env, NewEnv):- traditional_while_eval(X, Env, NewEnv).
 
 % Test
 % statement_eval(t_statement(t_var_dec(t_datatype(numeral),t_assign(t_identifier(t_str(t_letter(x),t_char)),t_expr(t_arith_expr_opr(t_arith_term_fac(t_arith_factor(t_dig_num(t_digit(2),t_num_dig(t_digit(1))))),t_add,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(4)))))))))), [], New_env).
@@ -260,9 +261,10 @@ conditional_eval(t_cond(A,_,C), Env, NewEnv):- boolean_expression_eval(A, Env, N
 ternary_eval(t_tern(A,B,_), Env, NewEnv):- boolean_expression_eval(A, Env, NewEnv1, true), statement_list_eval(B, NewEnv1, NewEnv).
 ternary_eval(t_tern(A,_,C), Env, NewEnv):- boolean_expression_eval(A, Env, NewEnv1, false), statement_list_eval(C, NewEnv1, NewEnv).
 
-% traditional_while_eval(t_while(M,_), Env, NewEnv):- boolean_expression_eval(M, Env, NewEnv, false).
-% traditional_while_eval(t_while(M,N), Env, NewEnv):- boolean_expression_eval(M, Env, NewEnv1, true), 
-%     statement_list_eval(N, NewEnv1, NewEnv2), traditional_while_eval(M,N, NewEnv2, NewEnv).
+
+traditional_while_eval(t_while(M,_), Env, NewEnv):- boolean_expression_eval(M, Env, false).
+traditional_while_eval(t_while(M,N), Env, NewEnv):- boolean_expression_eval(M, Env, true), 
+statement_list_eval(N, NewEnv1, NewEnv2), traditional_while_eval(t_while(M,N), NewEnv2, NewEnv).
 
 
 % Test
