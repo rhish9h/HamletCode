@@ -77,13 +77,14 @@ assignment_eval(t_assign(X,Y), Env, NewEnv, Value):-
 % TODO: arith expr in ()
 
 
-
-% % arithmetic_term(t_arith_term_opr(A,B,C)) --> arithmetic_factor(A), mul_div_operator(B), arithmetic_term(C).
-% arithmetic_term_eval(t_arith_term_opr(A,B,C), Env, Value) :-
-%     arithmetic_factor_eval(A, Env, First),
-%     mul_div_operator(B, *),
-%     arithmetic_factor_eval(C, Env, Second),
-%     Value is First * Second.
+% Test
+% arithmetic_term_eval(t_arith_term_opr(t_arith_factor(t_dig_num(t_digit(2),t_num_dig(t_digit(1)))),t_mul,t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(4))))), [], R).
+% R = 48.
+arithmetic_term_eval(t_arith_term_opr(A,B,C), Env, Value) :-
+    arithmetic_factor_eval(A, Env, First),
+    mul_div_operator(B, *),
+    arithmetic_term_eval(C, Env, Second),
+    Value is First * Second.
 
 % arithmetic_term_eval(t_arith_term_fac(t_arith_factor(t_identifier(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char))))))))), [("result", 12)], Z).
 % Z = 12 .

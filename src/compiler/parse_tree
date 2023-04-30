@@ -68,10 +68,10 @@ number(t_num_dig(X)) --> digit(X).
 number(t_dig_num(X,Y)) --> digit(X), number(Y).
 
 string(t_string(A)) --> [~], my_string(A), [~].
-my_string(t_str(X,Y)) --> (letter(X) | digit(X)), string_chars(Y).
+my_string(t_str(X,Y)) --> letter(X), string_chars(Y).
 
 string_chars(t_char) --> [].
-string_chars(t_str_char(X,Y)) --> (letter(X) | digit(X)), string_chars(Y).
+string_chars(t_str_char(X,Y)) --> letter(X), string_chars(Y).
 
 add_sub_operator(t_add) --> [+].
 add_sub_operator(t_sub) --> [-].
