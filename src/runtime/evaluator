@@ -76,6 +76,26 @@ assignment_eval(t_assign(X,Y), Env, NewEnv, Value):-
 % | ['('], arithmetic_expression(X), [')'].
 % TODO: arith expr in ()
 
+% Test
+% arithmetic_expression_eval(t_arith_expr_opr(t_arith_term_fac(t_arith_factor(t_dig_num(t_digit(2),t_num_dig(t_digit(1))))),t_add,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(4)))))), [], R).
+% R = 16.
+arithmetic_expression_eval(t_arith_expr_opr(A,B,C), Env, Value) :-
+    arithmetic_term_eval(A, Env, Left),
+    add_sub_op_eval(B, +),
+    arithmetic_expression_eval(C, Env, Right),
+    Value is Left + Right.
+
+% Test
+% arithmetic_expression_eval(t_arith_expr_opr(t_arith_term_fac(t_arith_factor(t_dig_num(t_digit(2),t_num_dig(t_digit(1))))),t_sub,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(4)))))), [], R).
+% R = 8.
+arithmetic_expression_eval(t_arith_expr_opr(A,B,C), Env, Value) :-
+    arithmetic_term_eval(A, Env, Left),
+    add_sub_op_eval(B, -),
+    arithmetic_expression_eval(C, Env, Right),
+    Value is Left - Right.
+
+arithmetic_expression_eval(t_arith_expr_term(A), Env, Value) :-
+    arithmetic_term_eval(A, Env, Value).
 
 % Test
 % arithmetic_term_eval(t_arith_term_opr(t_arith_factor(t_dig_num(t_digit(2),t_num_dig(t_digit(1)))),t_mul,t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(4))))), [], R).
