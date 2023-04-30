@@ -1,0 +1,5 @@
+act
+    scene
+        i be x and y.
+    end scene
+end act

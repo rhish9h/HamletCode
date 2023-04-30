@@ -111,8 +111,8 @@ statement_eval(t_statement(X), Env, NewEnv):- ternary_eval(X, Env, NewEnv).
 bool_literal_eval(t_bool(aye),true).
 bool_literal_eval(t_bool(nay),false).
 
-boolean_expression_eval(t_bool_lit(X), _, _, true):- bool_literal_eval(X, true).
-boolean_expression_eval(t_bool_lit(X), _, _, false):- bool_literal_eval(X, false).
+boolean_expression_eval(t_bool_lit(X),  _, true):- bool_literal_eval(X, true).
+boolean_expression_eval(t_bool_lit(X),  _, false):- bool_literal_eval(X, false).
 
 % Test
 % boolean_expression_eval(t_bool_not(t_bool_lit(t_bool(nay))), [], X).
@@ -121,10 +121,41 @@ boolean_expression_eval(t_bool_not(X), _, true):- boolean_expression_eval(X,_,fa
 boolean_expression_eval(t_bool_not(X), _, false):-boolean_expression_eval(X,_,true).
 
 % Test
-% boolean_expression_eval(t_bool_and(t_bool(aye),t_bool(aye)), [],X).
+% boolean_expression_eval(t_bool_and(t_bool(aye),t_bool(aye)), [],X).  
+% X = true .
+% boolean_expression_eval(t_bool_and(t_bool(aye),t_bool(nay)), [],X). 
+% X = false .
+% boolean_expression_eval(t_bool_and(t_bool(nay),t_bool(nay)), [],X). 
+% X = false .
+% boolean_expression_eval(t_bool_and(t_bool(nay),t_bool(aye)), [],X). 
+% X = false .
 % true.
 boolean_expression_eval(t_bool_and(X,Y), _, true):- bool_literal_eval(X,true),bool_literal_eval(Y,true).
-boolean_expression_eval(t_bool_and(_,_), _, false).
+boolean_expression_eval(t_bool_and(X,Y), _, false):- bool_literal_eval(X,true),bool_literal_eval(Y,false).
+boolean_expression_eval(t_bool_and(X,Y), _, false):- bool_literal_eval(X,false),bool_literal_eval(Y,true).
+boolean_expression_eval(t_bool_and(X,Y), _, false):- bool_literal_eval(X,false),bool_literal_eval(Y,false).
+
+% boolean_expression_eval(t_bool_or(X,Y), _, true):- bool_literal_eval(X,true),bool_literal_eval(Y,true).
+% boolean_expression_eval(t_bool_or(X,Y), _, true):- bool_literal_eval(X,true),bool_literal_eval(Y,false).
+% boolean_expression_eval(t_bool_or(X,Y), _, true):- bool_literal_eval(X,false),bool_literal_eval(Y,true).
+% boolean_expression_eval(t_bool_or(X,Y), _, false):- bool_literal_eval(X,false),bool_literal_eval(Y,false).
+
+% boolean_expression_eval(t_bool_and(t_identifier(t_str(t_letter(x),t_char)),t_identifier(t_str(t_letter(y),t_char))) , [("x",2),("y",2) , ("i", 4)],X ). 
+% X = true .
+boolean_expression_eval(t_bool_and(X,Y), Env, true):- 
+    identifier_eval(X,Env,Val1), 
+    identifier_eval(Y,Env,Val2),
+    Val1=Val2.
+
+% Test
+% boolean_expression_eval(t_bool_and(t_identifier(t_str(t_letter(x),t_char)),t_identifier(t_str(t_letter(y),t_char))) , [("x",2),("y",3) , ("i", 4)],X ). 
+% X = false .
+
+boolean_expression_eval(t_bool_and(X,Y), Env, false):- 
+    identifier_eval(X,Env,Val1), 
+    identifier_eval(Y,Env,Val2),
+    Val1\=Val2.
+% boolean_expression_eval(t_bool_and(_,_), _, false).
 % TODO: compare identifiers
 
 % Test
