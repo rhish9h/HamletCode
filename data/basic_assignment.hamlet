@@ -1,5 +1,6 @@
 act
   scene
-    x be ~hello~.
+    let verse x be ~hello~.
+    sayeth x.
   end scene
 end act
