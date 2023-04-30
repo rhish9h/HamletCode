@@ -22,8 +22,10 @@ act_eval(t_act(X), Env, NewEnv):- scene_list_eval(X, Env, NewEnv).
 scene_list_eval(t_single_scene_list(X), Env, NewEnv):- scene_declaration_eval(X, Env, NewEnv).
 
 % Test
-%
-% scene_list(t_multi_scene_list(X,Y)) --> scene_declaration(X), scene_list(Y).
+%scene_list_eval(t_multi_scene_list(t_scene(t_single_stmt_list(t_statement(t_print(t_string(t_str(t_letter(h),t_str_char(t_letter(e),t_str_char(t_letter(l),t_str_char(t_letter(l),t_str_char(t_letter(o),t_str_char(t_letter(w),t_str_char(t_letter(o),t_str_char(t_letter(r),t_str_char(t_letter(l),t_str_char(t_letter(d),t_char))))))))))))))),t_single_scene_list(t_scene(t_single_stmt_list(t_statement(t_print(t_string(t_str(t_letter(h),t_str_char(t_letter(i),t_char))))))))) , [] , X).
+% helloworld
+% hi
+% X = [].
 scene_list_eval(t_multi_scene_list(X, Y), Env, NewEnv) :-
     scene_declaration_eval(X, Env, NewEnv1),
     scene_list_eval(Y, NewEnv1, NewEnv).
