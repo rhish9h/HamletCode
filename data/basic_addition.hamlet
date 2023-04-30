@@ -1,5 +1,5 @@
 act
     scene
-        x be 12 + 4.
+        let numeral x be 12 + 4.
     end scene
 end act

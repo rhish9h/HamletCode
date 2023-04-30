@@ -37,12 +37,20 @@ scene_list_eval(t_multi_scene_list(X, Y), Env, NewEnv) :-
 scene_declaration_eval(t_scene(X) , Env , NewEnv) :- 
     statement_list_eval(X , Env , NewEnv).
 
-% TODO :- variable declaration for bool and numeral
+% TODO :- variable declaration for bool
 % t_var_dec(t_datatype(verse),t_assign(t_identifier(t_str(t_letter(x),t_char)),t_string(t_str(t_letter(h),t_str_char(t_letter(e),t_str_char(t_letter(l),t_str_char(t_letter(l),t_str_char(t_letter(o),t_char))))))))
 variable_declaration_eval(t_var_dec(X,Y), Env, NewEnv) :-
     datatype_eval(X, verse),
     assignment_eval(Y, Env, NewEnv, String_eval),
     string(String_eval).
+
+% Test
+% variable_declaration_eval(t_var_dec(t_datatype(numeral),t_assign(t_identifier(t_str(t_letter(x),t_char)),t_expr(t_arith_expr_opr(t_arith_term_fac(t_arith_factor(t_dig_num(t_digit(2),t_num_dig(t_digit(1))))),t_add,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(4))))))))), [], NewEnv).
+% NewEnv = [("x", 16)] .
+variable_declaration_eval(t_var_dec(X,Y), Env, NewEnv) :-
+    datatype_eval(X, numeral),
+    assignment_eval(Y, Env, NewEnv, Number_eval),
+    number(Number_eval).
 
 % Test
 % datatype_eval(t_datatype(numeral), X).
@@ -178,6 +186,11 @@ statement_list_eval(t_multi_stmt_list(X,Y), Env, NewEnv) :- statement_eval(X, En
 statement_eval(t_statement(X), Env, Env):- print_eval(X,Env).
 statement_eval(t_statement(X), Env, NewEnv):- conditional_eval(X, Env, NewEnv).
 statement_eval(t_statement(X), Env, NewEnv):- ternary_eval(X, Env, NewEnv).
+
+% Test
+% statement_eval(t_statement(t_var_dec(t_datatype(numeral),t_assign(t_identifier(t_str(t_letter(x),t_char)),t_expr(t_arith_expr_opr(t_arith_term_fac(t_arith_factor(t_dig_num(t_digit(2),t_num_dig(t_digit(1))))),t_add,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(4)))))))))), [], New_env).
+% New_env = [("x", 16)] .
+statement_eval(t_statement(X), Env, New_env) :- variable_declaration_eval(X, Env, New_env).
 % statement_eval(t_statement(X), Env, NewEnv):- traditional_while_eval(X, Env, NewEnv).
 
 bool_literal_eval(t_bool(aye),true).
