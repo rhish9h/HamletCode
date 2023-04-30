@@ -196,8 +196,11 @@ statement_list_eval(t_single_stmt_list(X), Env, NewEnv) :-
 %X = [("result",12)]
 statement_list_eval(t_multi_stmt_list(X,Y), Env, NewEnv) :- statement_eval(X, Env, NewEnv1), statement_list_eval(Y, NewEnv1, NewEnv).
 
-% TODO: statement list for scene decl
-% statement_list_eval(t_dec_stmt_list(X), Env, NewEnv) --> scene_declaration_eval(X, Env, NewEnv).
+% Test
+% statement_list_eval(t_dec_stmt_list(t_scene(t_single_stmt_list(t_statement(t_print(t_string(t_str(t_letter(t),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(t),t_char)))))))))),[],R).
+% test
+% R = [] .
+statement_list_eval(t_dec_stmt_list(X), Env, NewEnv) :- scene_declaration_eval(X, Env, NewEnv).
 
 % Test
 % statement_eval( t_statement(t_print(t_identifier(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char))))))))) , [("result" ,12 )] , X ).
@@ -258,7 +261,10 @@ boolean_expression_eval(t_bool_lit(X),  Env, false):- identifier_eval(X, Env, Va
 boolean_expression_eval(t_bool_lit(X), Env, Value) :-
     comparison_eval(X, Env, Value).
 
-% TODO boolean expression with brackets
+% boolean_expression_eval(t_bool_expr(t_bool_and(t_bool(aye),t_bool(nay))),[],R).
+% R = false .
+boolean_expression_eval(t_bool_expr(X), Env, Value):-
+    boolean_expression_eval(X, Env, Value).
 
 % Test
 % boolean_expression_eval(t_bool_not(t_bool_lit(t_bool(nay))), [], X).
