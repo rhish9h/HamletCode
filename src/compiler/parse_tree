@@ -76,7 +76,7 @@ string_chars(t_str_char(X,Y)) --> (letter(X) | digit(X)), string_chars(Y).
 add_sub_operator(t_add) --> [+].
 add_sub_operator(t_sub) --> [-].
 mul_div_operator(t_mul) --> [*].
-mul_div_operator(t_mul) --> [/].
+mul_div_operator(t_div) --> [/].
 comparison_operator(t_ls_op) --> [<].
 comparison_operator(t_gt_op) --> [>].
 comparison_operator(t_lte_op) --> [<=].

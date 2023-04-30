@@ -59,7 +59,46 @@ assignment_eval(t_assign(X,Y), Env, NewEnv, String_eval):-
     string_eval(Y, String_eval),
     update(Id_eval, String_eval, Env, NewEnv).
 
-% assignment_eval(t_assign(X,Y), Env, NewEnv):- identifier_eval(X), expr_eval(Y), update(X,Y,Env, NewEnv).
+assignment_eval(t_assign(X,Y), Env, NewEnv, Value):- 
+    identifier_eval(X, Id_eval), 
+    % expression_eval(Y, Env, Value), 
+    update(Id_eval, Value, Env, NewEnv).
+
+%     % expression(t_expr(A)) --> arithmetic_expression(A) | boolean_expression(A).
+% expression_eval(t_expr(A), Env, Value) :-
+%     arithmetic_expression_eval(A, Env, Value).
+
+% arithmetic_expression_eval(t_arith_expr_term(A), Env, Value) :-
+%     arithmetic_term_eval(A, Env, Value).
+
+% arithmetic_factor(t_arith_factor(X)) --> identifier(X)
+% | number(X)
+% | ['('], arithmetic_expression(X), [')'].
+% TODO: arith expr in ()
+
+
+
+% % arithmetic_term(t_arith_term_opr(A,B,C)) --> arithmetic_factor(A), mul_div_operator(B), arithmetic_term(C).
+% arithmetic_term_eval(t_arith_term_opr(A,B,C), Env, Value) :-
+%     arithmetic_factor_eval(A, Env, First),
+%     mul_div_operator(B, *),
+%     arithmetic_factor_eval(C, Env, Second),
+%     Value is First * Second.
+
+% arithmetic_term_eval(t_arith_term_fac(t_arith_factor(t_identifier(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char))))))))), [("result", 12)], Z).
+% Z = 12 .
+arithmetic_term_eval(t_arith_term_fac(A), Env, Value) :-
+    arithmetic_factor_eval(A, Env, Value).
+
+% arithmetic_factor_eval(t_arith_factor(t_identifier(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char)))))))), [("result", 12)], Z).
+% Z = 12 .
+arithmetic_factor_eval(t_arith_factor(X), Env, Value) :-
+    identifier_eval(X, Env, Value).
+
+% arithmetic_factor_eval(t_arith_factor(t_dig_num(t_digit(1),t_dig_num(t_digit(2),t_dig_num(t_digit(6),t_dig_num(t_digit(5),t_num_dig(t_digit(1))))))), [], V).
+% V = 15621.
+arithmetic_factor_eval(t_arith_factor(X), _, Value) :-
+    number_eval(X, Value).
 
 % Test
 % print_eval(t_print(t_identifier(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char)))))))), [("result", 12)]).
@@ -235,6 +274,11 @@ number_eval(t_dig_num(X,Y), Value) :-
     digit_eval(X, Digit_eval),
     number_eval(Y, Number_eval),
     Value is Digit_eval + 10 * Number_eval.
+
+add_sub_op_eval(t_add, +).
+add_sub_op_eval(t_sub, -).
+mul_div_operator(t_mul, *).
+mul_div_operator(t_div, /).
 
 letter_eval(t_letter('a'), 'a').
 letter_eval(t_letter('b'), 'b').
