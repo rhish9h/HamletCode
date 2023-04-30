@@ -222,6 +222,26 @@ statement_eval(t_statement(X), Env, New_env) :- assignment_eval(X, Env, New_env,
 % TODO statement for range_for
 % statement_eval(t_statement(X), Env, NewEnv):- traditional_while_eval(X, Env, NewEnv).
 
+statement_eval(t_statement(X), Env, NewEnv) :- for_loop_eval(X, Env, NewEnv).
+
+for_loop_eval(t_range_for(_, Id, Start, End, Step, Stm_list), Env, NewEnv) :-
+    number_eval(Start, Start_eval),
+    number_eval(End, End_eval),
+    number_eval(Step, Step_eval),
+    identifier_eval(Id, Id_eval),
+    update(Id_eval, Start_eval, Env, NewEnv1),
+    for_loop_range(Start_eval, End_eval, Id_eval, Stm_list, Step_eval, NewEnv1, NewEnv).
+
+for_loop_range(Start, End, _, _, _,Env, Env) :-
+    Start>=End.
+
+for_loop_range(Start, End, LoopVar, StmtList, Stp,Env, NewEnv) :-
+    Start < End,
+    update(LoopVar, Start, Env, UpdatedEnv),
+    statement_list_eval(StmtList, UpdatedEnv, TempEnv),
+    NextStart is Start + Stp,
+    for_loop_range(NextStart, End, LoopVar, StmtList,Stp,TempEnv, NewEnv).
+
 bool_literal_eval(t_bool(aye),true).
 bool_literal_eval(t_bool(nay),false).
 
