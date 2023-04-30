@@ -145,10 +145,11 @@ arithmetic_factor_eval(t_arith_factor(X), Env, Value) :-
 arithmetic_factor_eval(t_arith_factor(X), _, Value) :-
     number_eval(X, Value).
 
-% arithmetic_factor(t_arith_factor(X)) --> identifier(X)
-% | number(X)
-% | ['('], arithmetic_expression(X), [')'].
-% TODO: arith expr in ()
+% Test
+% arithmetic_factor_eval(t_arith_factor(t_arith_expr_opr(t_arith_term_fac(t_arith_factor(t_dig_num(t_digit(2),t_num_dig(t_digit(1))))),t_add,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(4))))))), [], R).
+% R = 16 .
+arithmetic_factor_eval(t_arith_factor(X), Env, Value) :-
+    arithmetic_expression_eval(X, Env, Value).
 
 % Test
 % print_eval(t_print(t_identifier(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char)))))))), [("result", 12)]).
