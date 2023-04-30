@@ -83,6 +83,25 @@ bool_literal_eval(t_bool(nay),false).
 boolean_expression_eval(t_bool_lit(X), _, _, true):- bool_literal_eval(X, true).
 boolean_expression_eval(t_bool_lit(X), _, _, false):- bool_literal_eval(X, false).
 
+% Test
+% boolean_expression_eval(t_bool_not(t_bool_lit(t_bool(nay))), [], X).
+% true.
+boolean_expression_eval(t_bool_not(X), _, true):- boolean_expression_eval(X,_,false).
+boolean_expression_eval(t_bool_not(X), _, false):-boolean_expression_eval(X,_,true).
+
+% Test
+% boolean_expression_eval(t_bool_and(t_bool(aye),t_bool(aye)), [],X).
+% true.
+boolean_expression_eval(t_bool_and(X,Y), _, true):- bool_literal_eval(X,true),bool_literal_eval(Y,true).
+boolean_expression_eval(t_bool_and(_,_), _, false).
+% TODO: compare identifiers
+
+% Test
+% boolean_expression_eval(t_bool_or(t_bool(nay),t_bool(nay)), [],X).
+% false.
+boolean_expression_eval(t_bool_or(X,Y), _, false):- bool_literal_eval(X,false),bool_literal_eval(Y,false).
+boolean_expression_eval(t_bool_or(_,_), _, true).
+
 % conditional_eval(t_cond(A,B,_), Env, NewEnv):- boolean_expression_eval(A, Env, NewEnv1, true), statement_list_eval(B, NewEnv1, NewEnv).
 % conditional_eval(t_cond(A,_,C), Env, NewEnv):- boolean_expression_eval(A, Env, NewEnv1, false), statement_list_eval(C, NewEnv1, NewEnv).
 
