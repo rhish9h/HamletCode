@@ -1,0 +1,9 @@
+act
+    scene
+        let numeral a be 1.
+        whilst it be a < 3 doth
+            sayeth a.
+            a be a + 1.
+        end whilst
+    end scene
+end act

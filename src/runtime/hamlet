@@ -1,0 +1,14 @@
+#!/bin/bash
+
+cwd="$(dirname "$0")"
+
+# Get program file name as cli arg
+file_name=$1
+
+parser_path="${cwd}/../compiler/parser"
+
+parse_tree=$("${cwd}/../compiler/parser" $file_name)
+
+output=$(swipl -s ${cwd}/evaluator -g "program_eval($parse_tree,[],P)"  -t "halt")
+
+echo $output

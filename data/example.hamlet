@@ -13,7 +13,7 @@ act
     end if
   end scene
   scene
-    forsooth, let i be 1 to 5 by step size of 1. doth
+    forsooth, let numeral i be 1 to 5 by step size of 1. doth
       sayeth i.
     end for
   end scene

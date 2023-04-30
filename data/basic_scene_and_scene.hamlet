@@ -1,0 +1,7 @@
+act
+    scene
+        scene
+            sayeth ~test~ .
+        end scene
+    end scene
+end act

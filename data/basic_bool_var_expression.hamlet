@@ -1,0 +1,6 @@
+act
+    scene
+        let bool x be aye.
+        let bool var be x.
+    end scene
+end act

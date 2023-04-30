@@ -1,0 +1,5 @@
+act
+    scene
+        let bool x be (aye and nay).
+    end scene
+end act

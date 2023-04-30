@@ -1,0 +1,8 @@
+act
+    scene
+        sayeth ~helloworld~.
+    end scene
+    scene
+        sayeth ~hi~.
+    end scene
+end act

@@ -1,0 +1,5 @@
+act
+    scene
+        x be 5 > 3.
+    end scene
+end act

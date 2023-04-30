@@ -56,7 +56,7 @@ conditional(t_cond(A,B,C)) --> [if, it, be], boolean_expression(A), [then, thee,
 
 ternary(t_tern(A,B,C)) --> boolean_expression(A), ['?'], statement_list(B), [':'], statement_list(C), ['.'].
 
-traditional_for(t_for(W,X,Y,Z)) --> [forsooth], (assignment(W) | variable_declaration(W)), ['.'], boolean_expression(X), ['.'], assignment(Y), [doth], statement_list(Z), [end, for].
+traditional_for(t_for(W,X,Y,Z)) --> [forsooth], (assignment(W) | variable_declaration(W)), boolean_expression(X), ['.'], assignment(Y), [doth], statement_list(Z), [end, for].
 
 traditional_while(t_while(M,N)) --> [whilst, it, be], boolean_expression(M), [doth], statement_list(N), [end, whilst].
 
@@ -67,16 +67,16 @@ number(t_num) --> [].
 number(t_num_dig(X)) --> digit(X).
 number(t_dig_num(X,Y)) --> digit(X), number(Y).
 
-string(A) --> [~], my_string(A), [~].
-my_string(t_str(X,Y)) --> (letter(X) | digit(X)), string_chars(Y).
+string(t_string(A)) --> [~], my_string(A), [~].
+my_string(t_str(X,Y)) --> letter(X), string_chars(Y).
 
 string_chars(t_char) --> [].
-string_chars(t_str_char(X,Y)) --> (letter(X) | digit(X)), string_chars(Y).
+string_chars(t_str_char(X,Y)) --> letter(X), string_chars(Y).
 
 add_sub_operator(t_add) --> [+].
 add_sub_operator(t_sub) --> [-].
 mul_div_operator(t_mul) --> [*].
-mul_div_operator(t_mul) --> [/].
+mul_div_operator(t_div) --> [/].
 comparison_operator(t_ls_op) --> [<].
 comparison_operator(t_gt_op) --> [>].
 comparison_operator(t_lte_op) --> [<=].
@@ -110,4 +110,13 @@ letter(t_letter('x'))-->['x'].
 letter(t_letter('y'))-->['y'].
 letter(t_letter('z'))-->['z'].
 
-digit(t_digit(X)) --> [X], {integer(X)}.
+digit(t_digit(0)) --> [0].
+digit(t_digit(1)) --> [1].
+digit(t_digit(2)) --> [2].
+digit(t_digit(3)) --> [3].
+digit(t_digit(4)) --> [4].
+digit(t_digit(5)) --> [5].
+digit(t_digit(6)) --> [6].
+digit(t_digit(7)) --> [7].
+digit(t_digit(8)) --> [8].
+digit(t_digit(9)) --> [9].

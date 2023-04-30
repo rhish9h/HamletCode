@@ -1,0 +1,34 @@
+#!/bin/bash
+
+cwd="$(dirname "$0")"
+
+run_hamlet() {
+    file="$1"
+    "${cwd}/hamlet" "$file"
+    exit_status=$?
+    if [ $exit_status -ne 0 ]; then
+        echo "Error executing $file. Exit status: $exit_status"
+        exit $exit_status
+    fi
+}
+
+run_hamlet "${cwd}/../../data/basic_addition.hamlet"
+run_hamlet "${cwd}/../../data/basic_arith_with_brackets.hamlet"
+run_hamlet "${cwd}/../../data/basic_bool_var_expression.hamlet"
+run_hamlet "${cwd}/../../data/basic_bool_with_bracket.hamlet"
+run_hamlet "${cwd}/../../data/basic_comparison.hamlet"
+run_hamlet "${cwd}/../../data/basic_multiplication.hamlet"
+run_hamlet "${cwd}/../../data/basic_print.hamlet"
+run_hamlet "${cwd}/../../data/basic_scene_and_scene.hamlet"
+run_hamlet "${cwd}/../../data/basic_traditional_forloop_test.hamlet"
+run_hamlet "${cwd}/../../data/basic_variable_decl.hamlet"
+run_hamlet "${cwd}/../../data/basic_while_test.hamlet"
+run_hamlet "${cwd}/../../data/count_char.hamlet"
+run_hamlet "${cwd}/../../data/example.hamlet"
+run_hamlet "${cwd}/../../data/factorial.hamlet"
+run_hamlet "${cwd}/../../data/fibonacci.hamlet"
+run_hamlet "${cwd}/../../data/hello_world.hamlet"
+run_hamlet "${cwd}/../../data/sum_of_squares.hamlet"
+
+echo ""
+echo "All commands executed successfully"

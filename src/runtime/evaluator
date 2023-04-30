@@ -1,0 +1,452 @@
+update(Var, Val, [], [(Var, Val)]).
+update(Var, Val, [(Var, _) | Env], [(Var,Val) | Env]).
+update(Var, Val, [(Var1, Val2) | L], [(Var1,Val2) | Env]):-
+    Var \= Var1,
+    update(Var,Val,L,Env).
+
+lookup(Var, [(Var, Val) | _], Val).
+lookup(Var, [_ | T], Val) :- lookup(Var, T, Val).
+
+% Test
+% program_eval(t_prog(t_act(t_single_scene_list(t_scene(t_single_stmt_list( t_statement(t_print(t_identifier(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char)))))))))))))) , [("result" ,12 )] , X ).
+% 12
+% X = [("result", 12)] .
+% program_eval(t_prog(t_act(t_single_scene_list(t_scene(t_single_stmt_list( t_statement(t_print(t_identifier(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char)))))))))))))) , [("result" ,12 )] , X ). 
+program_eval(t_prog(X), Env, NewEnv):- act_eval(X, Env, NewEnv).
+act_eval(t_act(X), Env, NewEnv):- scene_list_eval(X, Env, NewEnv).
+
+% Test
+% scene_list_eval(t_single_scene_list(t_scene(t_single_stmt_list( t_statement(t_print(t_identifier(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char)))))))))))) , [("result" ,12 )] , X ). 
+% 12
+% X = [("result", 12)] .
+scene_list_eval(t_single_scene_list(X), Env, NewEnv):- scene_declaration_eval(X, Env, NewEnv).
+
+% Test
+%scene_list_eval(t_multi_scene_list(t_scene(t_single_stmt_list(t_statement(t_print(t_string(t_str(t_letter(h),t_str_char(t_letter(e),t_str_char(t_letter(l),t_str_char(t_letter(l),t_str_char(t_letter(o),t_str_char(t_letter(w),t_str_char(t_letter(o),t_str_char(t_letter(r),t_str_char(t_letter(l),t_str_char(t_letter(d),t_char))))))))))))))),t_single_scene_list(t_scene(t_single_stmt_list(t_statement(t_print(t_string(t_str(t_letter(h),t_str_char(t_letter(i),t_char))))))))) , [] , X).
+% helloworld
+% hi
+% X = [].
+scene_list_eval(t_multi_scene_list(X, Y), Env, NewEnv) :-
+    scene_declaration_eval(X, Env, NewEnv1),
+    scene_list_eval(Y, NewEnv1, NewEnv).
+
+% Test
+% scene_declaration_eval(t_scene(t_single_stmt_list( t_statement(t_print(t_identifier(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char))))))))))) , [("result" ,12 )] , X ).
+% 12
+% X = [("result", 12)] .
+scene_declaration_eval(t_scene(X) , Env , NewEnv) :- 
+    statement_list_eval(X , Env , NewEnv).
+
+% t_var_dec(t_datatype(verse),t_assign(t_identifier(t_str(t_letter(x),t_char)),t_string(t_str(t_letter(h),t_str_char(t_letter(e),t_str_char(t_letter(l),t_str_char(t_letter(l),t_str_char(t_letter(o),t_char))))))))
+variable_declaration_eval(t_var_dec(X,Y), Env, NewEnv) :-
+    datatype_eval(X, verse),
+    assignment_eval(Y, Env, NewEnv, String_eval),
+    string(String_eval).
+
+% Test
+% variable_declaration_eval(t_var_dec(t_datatype(numeral),t_assign(t_identifier(t_str(t_letter(x),t_char)),t_expr(t_arith_expr_opr(t_arith_term_fac(t_arith_factor(t_dig_num(t_digit(2),t_num_dig(t_digit(1))))),t_add,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(4))))))))), [], NewEnv).
+% NewEnv = [("x", 16)] .
+variable_declaration_eval(t_var_dec(X,Y), Env, NewEnv) :-
+    datatype_eval(X, numeral),
+    assignment_eval(Y, Env, NewEnv, Number_eval),
+    number(Number_eval).
+
+variable_declaration_eval(t_var_dec(X,Y), Env, NewEnv) :-
+    datatype_eval(X, bool),
+    assignment_eval(Y, Env, NewEnv, Bool_eval),
+    boolean(Bool_eval).
+
+% Test
+% datatype_eval(t_datatype(numeral), X).
+% X = numeral.
+datatype_eval(t_datatype(numeral), numeral).
+datatype_eval(t_datatype(verse), verse).
+datatype_eval(t_datatype(bool), bool).
+
+% Test
+% assignment_eval(t_assign(t_identifier(t_str(t_letter(x),t_char)),t_string(t_str(t_letter(h),t_str_char(t_letter(e),t_str_char(t_letter(l),t_str_char(t_letter(l),t_str_char(t_letter(o),t_char))))))), [("x", "hi")], Y, Z).
+% Y = [("x", "hello")] .
+assignment_eval(t_assign(X,Y), Env, NewEnv, String_eval):-
+    identifier_eval(X, Id_eval),
+    string_eval(Y, String_eval),
+    update(Id_eval, String_eval, Env, NewEnv).
+
+% Test
+% assignment_eval(t_assign(t_identifier(t_str(t_letter(x),t_char)),t_expr(t_arith_expr_opr(t_arith_term_fac(t_arith_factor(t_dig_num(t_digit(2),t_num_dig(t_digit(1))))),t_add,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(4)))))))), [("x", 1)], NewEnv, Result).
+% NewEnv = [("x", 16)],
+% Result = 16 .
+assignment_eval(t_assign(X,Y), Env, NewEnv, Value):- 
+    identifier_eval(X, Id_eval), 
+    expression_eval(Y, Env, Value), 
+    update(Id_eval, Value, Env, NewEnv).
+
+% Test
+% expression_eval(t_expr(t_arith_expr_opr(t_arith_term_fac(t_arith_factor(t_dig_num(t_digit(2),t_num_dig(t_digit(1))))),t_add,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(4))))))), [], R).
+% R = 16 .
+expression_eval(t_expr(A), Env, Value) :-
+    arithmetic_expression_eval(A, Env, Value).
+
+% expression_eval(t_expr(t_bool_lit(t_comp(t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(5))))),t_gt_op,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(3)))))))), [], R).
+% R = true .
+expression_eval(t_expr(A), Env, Value) :-
+    boolean_expression_eval(A, Env, Value).
+
+% Test
+% arithmetic_expression_eval(t_arith_expr_opr(t_arith_term_fac(t_arith_factor(t_dig_num(t_digit(2),t_num_dig(t_digit(1))))),t_add,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(4)))))), [], R).
+% R = 16.
+arithmetic_expression_eval(t_arith_expr_opr(A,B,C), Env, Value) :-
+    arithmetic_term_eval(A, Env, Left),
+    add_sub_op_eval(B, +),
+    arithmetic_expression_eval(C, Env, Right),
+    Value is Left + Right.
+
+% Test
+% arithmetic_expression_eval(t_arith_expr_opr(t_arith_term_fac(t_arith_factor(t_dig_num(t_digit(2),t_num_dig(t_digit(1))))),t_sub,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(4)))))), [], R).
+% R = 8.
+arithmetic_expression_eval(t_arith_expr_opr(A,B,C), Env, Value) :-
+    arithmetic_term_eval(A, Env, Left),
+    add_sub_op_eval(B, -),
+    arithmetic_expression_eval(C, Env, Right),
+    Value is Left - Right.
+
+arithmetic_expression_eval(t_arith_expr_term(A), Env, Value) :-
+    arithmetic_term_eval(A, Env, Value).
+
+% Test
+% arithmetic_term_eval(t_arith_term_opr(t_arith_factor(t_dig_num(t_digit(2),t_num_dig(t_digit(1)))),t_mul,t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(4))))), [], R).
+% R = 48.
+arithmetic_term_eval(t_arith_term_opr(A,B,C), Env, Value) :-
+    arithmetic_factor_eval(A, Env, First),
+    mul_div_operator(B, *),
+    arithmetic_term_eval(C, Env, Second),
+    Value is First * Second.
+
+% Test
+% arithmetic_term_eval(t_arith_term_opr(t_arith_factor(t_dig_num(t_digit(2),t_num_dig(t_digit(1)))),t_div,t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(4))))), [], R).
+% R = 3.
+arithmetic_term_eval(t_arith_term_opr(A,B,C), Env, Value) :-
+    arithmetic_factor_eval(A, Env, First),
+    mul_div_operator(B, /),
+    arithmetic_term_eval(C, Env, Second),
+    Value is First / Second.
+
+% arithmetic_term_eval(t_arith_term_fac(t_arith_factor(t_identifier(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char))))))))), [("result", 12)], Z).
+% Z = 12 .
+arithmetic_term_eval(t_arith_term_fac(A), Env, Value) :-
+    arithmetic_factor_eval(A, Env, Value).
+
+% arithmetic_factor_eval(t_arith_factor(t_identifier(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char)))))))), [("result", 12)], Z).
+% Z = 12 .
+arithmetic_factor_eval(t_arith_factor(X), Env, Value) :-
+    identifier_eval(X, Env, Value).
+
+% arithmetic_factor_eval(t_arith_factor(t_dig_num(t_digit(1),t_dig_num(t_digit(2),t_dig_num(t_digit(6),t_dig_num(t_digit(5),t_num_dig(t_digit(1))))))), [], V).
+% V = 15621.
+arithmetic_factor_eval(t_arith_factor(X), _, Value) :-
+    number_eval(X, Value).
+
+% Test
+% arithmetic_factor_eval(t_arith_factor(t_arith_expr_opr(t_arith_term_fac(t_arith_factor(t_dig_num(t_digit(2),t_num_dig(t_digit(1))))),t_add,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(4))))))), [], R).
+% R = 16 .
+arithmetic_factor_eval(t_arith_factor(X), Env, Value) :-
+    arithmetic_expression_eval(X, Env, Value).
+
+% Test
+% print_eval(t_print(t_identifier(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char)))))))), [("result", 12)]).
+% 12
+print_eval(t_print(X), Env) :-
+    identifier_eval(X, Env, Value),
+    writeln(Value).
+
+% Test
+% print_eval(t_print(t_string(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char)))))))), []).
+% result
+print_eval(t_print(X), _) :-
+    string_eval(X, Value),
+    writeln(Value).
+
+% Test
+% print_eval(t_print(t_bool(aye)), []).                                                                                                         
+% true
+print_eval(t_print(X), _) :-
+    bool_literal_eval(X, Value),
+    writeln(Value).
+
+% Test
+% identifier_eval(t_identifier(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char))))))), Z).
+identifier_eval(t_identifier(X), Value) :-
+    my_string_eval(X, Value).
+
+% Test
+% identifier_eval(t_identifier(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char))))))), [("result", 12)], Z).
+identifier_eval(t_identifier(X), Env, Value) :-
+    my_string_eval(X, String_eval),
+    lookup(String_eval, Env, Value).
+
+% Test
+% statement_list_eval(t_single_stmt_list( t_statement(t_print(t_identifier(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char)))))))))) , [("result" ,12 )] , X ).      
+% 12
+% X = [("result", 12)] .
+statement_list_eval(t_single_stmt_list(X), Env, NewEnv) :-
+    statement_eval(X, Env, NewEnv).
+% Test
+% statement_list_eval(t_multi_stmt_list(t_statement(t_print(t_string(t_str(t_letter(a),t_str_char(t_letter(b),t_str_char(t_letter(c),t_char)))))),t_single_stmt_list(t_statement(t_print(t_string(t_str(t_letter(b),t_str_char(t_letter(c),t_str_char(t_letter(d),t_char)))))))), [("result", 12)], X).
+%abc
+%bcd
+%X = [("result",12)]
+statement_list_eval(t_multi_stmt_list(X,Y), Env, NewEnv) :- statement_eval(X, Env, NewEnv1), statement_list_eval(Y, NewEnv1, NewEnv).
+
+% Test
+% statement_list_eval(t_dec_stmt_list(t_scene(t_single_stmt_list(t_statement(t_print(t_string(t_str(t_letter(t),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(t),t_char)))))))))),[],R).
+% test
+% R = [] .
+statement_list_eval(t_dec_stmt_list(X), Env, NewEnv) :- scene_declaration_eval(X, Env, NewEnv).
+
+% Test
+% statement_eval( t_statement(t_print(t_identifier(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char))))))))) , [("result" ,12 )] , X ).
+% 12
+statement_eval(t_statement(X), Env, Env):- print_eval(X,Env).
+statement_eval(t_statement(X), Env, NewEnv):- conditional_eval(X, Env, NewEnv).
+statement_eval(t_statement(X), Env, NewEnv):- ternary_eval(X, Env, NewEnv).
+statement_eval(t_statement(X), Env, NewEnv):- traditional_while_eval(X, Env, NewEnv).
+statement_eval(t_statement(X), Env, NewEnv):- traditional_for_eval(X, Env, NewEnv).
+
+% Test
+% statement_eval(t_statement(t_var_dec(t_datatype(numeral),t_assign(t_identifier(t_str(t_letter(x),t_char)),t_expr(t_arith_expr_opr(t_arith_term_fac(t_arith_factor(t_dig_num(t_digit(2),t_num_dig(t_digit(1))))),t_add,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(4)))))))))), [], New_env).
+% New_env = [("x", 16)] .
+statement_eval(t_statement(X), Env, New_env) :- variable_declaration_eval(X, Env, New_env).
+
+% Test
+% statement_eval(t_statement(t_assign(t_identifier(t_str(t_letter(x),t_char)),t_expr(t_bool_lit(t_comp(t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(5))))),t_gt_op,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(3)))))))))), [("x", false)], NewEnv).          
+% NewEnv = [("x", true)] .
+statement_eval(t_statement(X), Env, New_env) :- assignment_eval(X, Env, New_env, _).
+
+% TODO statement for for
+% TODO statement for while
+% TODO statement for range_for
+% statement_eval(t_statement(X), Env, NewEnv):- traditional_while_eval(X, Env, NewEnv).
+
+statement_eval(t_statement(X), Env, NewEnv) :- for_loop_eval(X, Env, NewEnv).
+
+for_loop_eval(t_range_for(_, Id, Start, End, Step, Stm_list), Env, NewEnv) :-
+    number_eval(Start, Start_eval),
+    number_eval(End, End_eval),
+    number_eval(Step, Step_eval),
+    identifier_eval(Id, Id_eval),
+    update(Id_eval, Start_eval, Env, NewEnv1),
+    for_loop_range(Start_eval, End_eval, Id_eval, Stm_list, Step_eval, NewEnv1, NewEnv).
+
+for_loop_range(Start, End, _, _, _,Env, Env) :-
+    Start>=End.
+
+for_loop_range(Start, End, LoopVar, StmtList, Stp,Env, NewEnv) :-
+    Start < End,
+    update(LoopVar, Start, Env, UpdatedEnv),
+    statement_list_eval(StmtList, UpdatedEnv, TempEnv),
+    NextStart is Start + Stp,
+    for_loop_range(NextStart, End, LoopVar, StmtList,Stp,TempEnv, NewEnv).
+
+bool_literal_eval(t_bool(aye),true).
+bool_literal_eval(t_bool(nay),false).
+
+boolean_expression_eval(t_bool_lit(X),  _, true):- bool_literal_eval(X, true).
+boolean_expression_eval(t_bool_lit(X),  _, false):- bool_literal_eval(X, false).
+
+boolean_expression_eval(t_bool_lit(X),  Env, true):- identifier_eval(X, Env, Val), Val=true.
+boolean_expression_eval(t_bool_lit(X),  Env, false):- identifier_eval(X, Env, Val), Val=false.
+
+% Test
+% boolean_expression_eval(t_bool_lit(t_comp(t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(5))))),t_gt_op,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(3))))))), [], R).
+% R = true .
+boolean_expression_eval(t_bool_lit(X), Env, Value) :-
+    comparison_eval(X, Env, Value).
+
+% boolean_expression_eval(t_bool_expr(t_bool_and(t_bool(aye),t_bool(nay))),[],R).
+% R = false .
+boolean_expression_eval(t_bool_expr(X), Env, Value):-
+    boolean_expression_eval(X, Env, Value).
+
+% Test
+% boolean_expression_eval(t_bool_not(t_bool_lit(t_bool(nay))), [], X).
+% true.
+boolean_expression_eval(t_bool_not(X), _, true):- boolean_expression_eval(X,_,false).
+boolean_expression_eval(t_bool_not(X), _, false):-boolean_expression_eval(X,_,true).
+
+% Test
+% boolean_expression_eval(t_bool_and(t_bool(aye),t_bool(aye)), [],X).  
+% X = true .
+% boolean_expression_eval(t_bool_and(t_bool(aye),t_bool(nay)), [],X). 
+% X = false .
+% boolean_expression_eval(t_bool_and(t_bool(nay),t_bool(nay)), [],X). 
+% X = false .
+% boolean_expression_eval(t_bool_and(t_bool(nay),t_bool(aye)), [],X). 
+% X = false .
+% true.
+boolean_expression_eval(t_bool_and(X,Y), _, true):- bool_literal_eval(X,true),bool_literal_eval(Y,true).
+boolean_expression_eval(t_bool_and(X,Y), _, false):- bool_literal_eval(X,true),bool_literal_eval(Y,false).
+boolean_expression_eval(t_bool_and(X,Y), _, false):- bool_literal_eval(X,false),bool_literal_eval(Y,true).
+boolean_expression_eval(t_bool_and(X,Y), _, false):- bool_literal_eval(X,false),bool_literal_eval(Y,false).
+
+% boolean_expression_eval(t_bool_or(t_bool(nay),t_bool(aye)), [],X).
+% X = true.
+% boolean_expression_eval(t_bool_or(t_bool(nay),t_bool(nay)), [],X).
+% X = false .
+% boolean_expression_eval(t_bool_or(t_bool(aye),t_bool(nay)), [],X).
+% X = true.
+boolean_expression_eval(t_bool_or(X,Y), _, true):- bool_literal_eval(X,true),bool_literal_eval(Y,true).
+boolean_expression_eval(t_bool_or(X,Y), _, true):- bool_literal_eval(X,true),bool_literal_eval(Y,false).
+boolean_expression_eval(t_bool_or(X,Y), _, true):- bool_literal_eval(X,false),bool_literal_eval(Y,true).
+boolean_expression_eval(t_bool_or(X,Y), _, false):- bool_literal_eval(X,false),bool_literal_eval(Y,false).
+
+% boolean_expression_eval(t_bool_and(t_identifier(t_str(t_letter(x),t_char)),t_identifier(t_str(t_letter(y),t_char))) , [("x",2),("y",2) , ("i", 4)],X ). 
+% X = true .
+boolean_expression_eval(t_bool_and(X,Y), Env, true):- 
+    identifier_eval(X,Env,Val1), 
+    identifier_eval(Y,Env,Val2),
+    Val1=Val2.
+
+% Test
+% boolean_expression_eval(t_bool_and(t_identifier(t_str(t_letter(x),t_char)),t_identifier(t_str(t_letter(y),t_char))) , [("x",2),("y",3) , ("i", 4)],X ). 
+% X = false .
+
+boolean_expression_eval(t_bool_and(X,Y), Env, false):- 
+    identifier_eval(X,Env,Val1), 
+    identifier_eval(Y,Env,Val2),
+    Val1\=Val2.
+% boolean_expression_eval(t_bool_and(_,_), _, false).
+
+% Test
+% comparison_eval(t_comp(t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(5))))),t_gt_op,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(3)))))), [], R).
+% R = true .
+comparison_eval(t_comp(A,Cmp,C), Env, Value):- 
+    arithmetic_expression_eval(A, Env, First),
+    arithmetic_expression_eval(C, Env, Second),
+    comparison_operator_eval(Cmp, First, Second, Value).
+
+% Test
+% conditional_eval(t_cond(t_bool_lit(t_bool(nay)),t_single_stmt_list(t_statement(t_print(t_string(t_str(t_letter(t),t_str_char(t_letter(r),t_str_char(t_letter(u),t_str_char(t_letter(e),t_char)))))))),t_single_stmt_list(t_statement(t_print(t_string(t_str(t_letter(f),t_str_char(t_letter(a),t_str_char(t_letter(l),t_str_char(t_letter(s),t_str_char(t_letter(e),t_char)))))))))),[("result",12)],X).
+% false
+conditional_eval(t_cond(A,B,_), Env, NewEnv):- boolean_expression_eval(A, Env, true), statement_list_eval(B, Env, NewEnv).
+conditional_eval(t_cond(A,_,C), Env, NewEnv):- boolean_expression_eval(A, Env, false), statement_list_eval(C, Env, NewEnv).
+
+% Test
+% ternary_eval(t_tern(t_bool_lit(t_bool(aye)),t_single_stmt_list(t_statement(t_print(t_string(t_str(t_letter(t),t_str_char(t_letter(r),t_str_char(t_letter(u),t_str_char(t_letter(e),t_char)))))))),t_single_stmt_list(t_statement(t_print(t_string(t_str(t_letter(f),t_str_char(t_letter(a),t_str_char(t_letter(l),t_str_char(t_letter(s),t_str_char(t_letter(e),t_char)))))))))),[("result",12)],X).
+% true
+ternary_eval(t_tern(A,B,_), Env, NewEnv):- boolean_expression_eval(A, Env, true), statement_list_eval(B, Env, NewEnv).
+ternary_eval(t_tern(A,_,C), Env, NewEnv):- boolean_expression_eval(A, Env, false), statement_list_eval(C, Env, NewEnv).
+
+
+traditional_while_eval(t_while(M,_), Env, Env):- boolean_expression_eval(M, Env, false).
+traditional_while_eval(t_while(M,N), Env, NewEnv):- boolean_expression_eval(M, Env, true), 
+statement_list_eval(N, Env, NewEnv1), traditional_while_eval(t_while(M,N), NewEnv1, NewEnv).
+
+for_helper(W, Env, NewEnv):- assignment_eval(W, Env, NewEnv, _) | variable_declaration_eval(W, Env, NewEnv).
+traditional_for_eval(t_for(W,X,_,_), Env, _):- for_helper(W, Env, NewEnv), boolean_expression_eval(X, NewEnv, false).
+traditional_for_eval(t_for(W,X,Y,Z), Env, NewEnv2):- for_helper(W, Env, NewEnv), boolean_expression_eval(X, NewEnv, true),
+statement_list_eval(Z, NewEnv, NewEnv1), traditional_for_eval(t_for(Y,X,Y,Z), NewEnv1,NewEnv2).
+
+% Test
+% string_eval(t_string(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char))))))), X).
+% X = "result".
+string_eval(t_string(A), Z_out) :-
+    my_string_eval(A, Z_out).
+
+% Test
+% my_string_eval(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char)))))), X).
+% X = "result".
+my_string_eval(t_str(X, Y), Z_out) :-
+    letter_eval(X, Letter_eval),
+    string_chars_eval(Y, String_eval),
+    string_concat(Letter_eval, String_eval, Z_out).
+
+% Test
+% string_chars_eval(t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char))))), X).
+% X = "esult".
+string_chars_eval(t_char, "").
+
+string_chars_eval(t_str_char(X,Y), Z_out) :-
+    letter_eval(X, Letter_eval),
+    string_chars_eval(Y, String_eval),
+    string_concat(Letter_eval, String_eval, Z_out).
+
+% Test
+% number_eval(t_num, V).
+% V = 0.
+number_eval(t_num, 0).
+
+% Test
+% number_eval(t_num_dig(t_digit(1)), V).
+% V = 1.
+number_eval(t_num_dig(X), Value) :-
+    digit_eval(X, Value).
+
+% Test
+% number_eval(t_dig_num(t_digit(1),t_dig_num(t_digit(2),t_dig_num(t_digit(6),t_dig_num(t_digit(5),t_num_dig(t_digit(1)))))), V).
+% V = 15621.
+number_eval(t_dig_num(X,Y), Value) :-
+    digit_eval(X, Digit_eval),
+    number_eval(Y, Number_eval),
+    Value is Digit_eval + 10 * Number_eval.
+
+add_sub_op_eval(t_add, +).
+add_sub_op_eval(t_sub, -).
+mul_div_operator(t_mul, *).
+mul_div_operator(t_div, /).
+
+comparison_operator_eval(t_ls_op, Left, Right, true) :- Left < Right.
+comparison_operator_eval(t_ls_op, Left, Right, false) :- not(Left < Right).
+comparison_operator_eval(t_gt_op, Left, Right, true) :- Left > Right.
+comparison_operator_eval(t_gt_op, Left, Right, false) :- not(Left > Right).
+comparison_operator_eval(t_lte_op, Left, Right, true) :- Left =< Right.
+comparison_operator_eval(t_lte_op, Left, Right, false) :- not(Left =< Right).
+comparison_operator_eval(t_gte_op, Left, Right, true) :- Left >= Right.
+comparison_operator_eval(t_gte_op, Left, Right, false) :- not(Left >= Right).
+comparison_operator_eval(t_eq_op, Left, Right, true) :- Left == Right.
+comparison_operator_eval(t_eq_op, Left, Right, false) :- not(Left == Right).
+
+comparison_operator_eval(t_ls_op, <).
+comparison_operator_eval(t_gt_op, >).
+comparison_operator_eval(t_lte_op, <=).
+comparison_operator_eval(t_gte_op, >=).
+comparison_operator_eval(t_eq_op, ==).
+
+letter_eval(t_letter('a'), 'a').
+letter_eval(t_letter('b'), 'b').
+letter_eval(t_letter('c'), 'c').
+letter_eval(t_letter('d'), 'd').
+letter_eval(t_letter('e'), 'e').
+letter_eval(t_letter('f'), 'f').
+letter_eval(t_letter('g'), 'g').
+letter_eval(t_letter('h'), 'h').
+letter_eval(t_letter('i'), 'i').
+letter_eval(t_letter('j'), 'j').
+letter_eval(t_letter('k'), 'k').
+letter_eval(t_letter('l'), 'l').
+letter_eval(t_letter('m'), 'm').
+letter_eval(t_letter('n'), 'n').
+letter_eval(t_letter('o'), 'o').
+letter_eval(t_letter('p'), 'p').
+letter_eval(t_letter('q'), 'q').
+letter_eval(t_letter('r'), 'r').
+letter_eval(t_letter('s'), 's').
+letter_eval(t_letter('t'), 't').
+letter_eval(t_letter('u'), 'u').
+letter_eval(t_letter('v'), 'v').
+letter_eval(t_letter('w'), 'w').
+letter_eval(t_letter('x'), 'x').
+letter_eval(t_letter('y'), 'y').
+letter_eval(t_letter('z'), 'z').
+
+digit_eval(t_digit(0), 0).
+digit_eval(t_digit(1), 1).
+digit_eval(t_digit(2), 2).
+digit_eval(t_digit(3), 3).
+digit_eval(t_digit(4), 4).
+digit_eval(t_digit(5), 5).
+digit_eval(t_digit(6), 6).
+digit_eval(t_digit(7), 7).
+digit_eval(t_digit(8), 8).
+digit_eval(t_digit(9), 9).
+
+boolean(true).
+boolean(false).
