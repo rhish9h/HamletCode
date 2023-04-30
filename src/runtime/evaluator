@@ -91,8 +91,8 @@ statement_list_eval(t_multi_stmt_list(X,Y), Env, NewEnv) :- statement_eval(X, En
 % statement_eval( t_statement(t_print(t_identifier(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char))))))))) , [("result" ,12 )] , X ).
 % 12
 statement_eval(t_statement(X), Env, Env):- print_eval(X,Env).
-% statement_eval(t_statement(X), Env, NewEnv):- conditional_eval(X, Env, NewEnv).
-% statement_eval(t_statement(X), Env, NewEnv):- ternary_eval(X, Env, NewEnv).
+statement_eval(t_statement(X), Env, NewEnv):- conditional_eval(X, Env, NewEnv).
+statement_eval(t_statement(X), Env, NewEnv):- ternary_eval(X, Env, NewEnv).
 % statement_eval(t_statement(X), Env, NewEnv):- traditional_while_eval(X, Env, NewEnv).
 
 bool_literal_eval(t_bool(aye),true).
@@ -120,11 +120,17 @@ boolean_expression_eval(t_bool_and(_,_), _, false).
 boolean_expression_eval(t_bool_or(X,Y), _, false):- bool_literal_eval(X,false),bool_literal_eval(Y,false).
 boolean_expression_eval(t_bool_or(_,_), _, true).
 
-% conditional_eval(t_cond(A,B,_), Env, NewEnv):- boolean_expression_eval(A, Env, NewEnv1, true), statement_list_eval(B, NewEnv1, NewEnv).
-% conditional_eval(t_cond(A,_,C), Env, NewEnv):- boolean_expression_eval(A, Env, NewEnv1, false), statement_list_eval(C, NewEnv1, NewEnv).
+% Test
+% conditional_eval(t_cond(t_bool_lit(t_bool(nay)),t_single_stmt_list(t_statement(t_print(t_string(t_str(t_letter(t),t_str_char(t_letter(r),t_str_char(t_letter(u),t_str_char(t_letter(e),t_char)))))))),t_single_stmt_list(t_statement(t_print(t_string(t_str(t_letter(f),t_str_char(t_letter(a),t_str_char(t_letter(l),t_str_char(t_letter(s),t_str_char(t_letter(e),t_char)))))))))),[("result",12)],X).
+% false
+conditional_eval(t_cond(A,B,_), Env, NewEnv):- boolean_expression_eval(A, Env, NewEnv1, true), statement_list_eval(B, NewEnv1, NewEnv).
+conditional_eval(t_cond(A,_,C), Env, NewEnv):- boolean_expression_eval(A, Env, NewEnv1, false), statement_list_eval(C, NewEnv1, NewEnv).
 
-% ternary_eval(t_tern(A,B,_), Env, NewEnv):- boolean_expression_eval(A, Env, NewEnv1, true), statement_list_eval(B, NewEnv1, NewEnv).
-% ternary_eval(t_tern(A,_,C), Env, NewEnv):- boolean_expression_eval(A, Env, NewEnv1, false), statement_list_eval(C, NewEnv1, NewEnv).
+% Test
+% ternary_eval(t_tern(t_bool_lit(t_bool(aye)),t_single_stmt_list(t_statement(t_print(t_string(t_str(t_letter(t),t_str_char(t_letter(r),t_str_char(t_letter(u),t_str_char(t_letter(e),t_char)))))))),t_single_stmt_list(t_statement(t_print(t_string(t_str(t_letter(f),t_str_char(t_letter(a),t_str_char(t_letter(l),t_str_char(t_letter(s),t_str_char(t_letter(e),t_char)))))))))),[("result",12)],X).
+% true
+ternary_eval(t_tern(A,B,_), Env, NewEnv):- boolean_expression_eval(A, Env, NewEnv1, true), statement_list_eval(B, NewEnv1, NewEnv).
+ternary_eval(t_tern(A,_,C), Env, NewEnv):- boolean_expression_eval(A, Env, NewEnv1, false), statement_list_eval(C, NewEnv1, NewEnv).
 
 % traditional_while_eval(t_while(M,_), Env, NewEnv):- boolean_expression_eval(M, Env, NewEnv, false).
 % traditional_while_eval(t_while(M,N), Env, NewEnv):- boolean_expression_eval(M, Env, NewEnv1, true), 
