@@ -247,13 +247,6 @@ boolean_expression_eval(t_bool_and(X,Y), Env, false):-
     identifier_eval(Y,Env,Val2),
     Val1\=Val2.
 % boolean_expression_eval(t_bool_and(_,_), _, false).
-% TODO: compare identifiers
-
-% Test
-% boolean_expression_eval(t_bool_or(t_bool(nay),t_bool(nay)), [],X).
-% false.
-boolean_expression_eval(t_bool_or(X,Y), _, false):- bool_literal_eval(X,false),bool_literal_eval(Y,false).
-boolean_expression_eval(t_bool_or(_,_), _, true).
 
 % Test
 % conditional_eval(t_cond(t_bool_lit(t_bool(nay)),t_single_stmt_list(t_statement(t_print(t_string(t_str(t_letter(t),t_str_char(t_letter(r),t_str_char(t_letter(u),t_str_char(t_letter(e),t_char)))))))),t_single_stmt_list(t_statement(t_print(t_string(t_str(t_letter(f),t_str_char(t_letter(a),t_str_char(t_letter(l),t_str_char(t_letter(s),t_str_char(t_letter(e),t_char)))))))))),[("result",12)],X).
@@ -325,6 +318,12 @@ add_sub_op_eval(t_add, +).
 add_sub_op_eval(t_sub, -).
 mul_div_operator(t_mul, *).
 mul_div_operator(t_div, /).
+
+comparison_operator_eval(t_ls_op, <).
+comparison_operator_eval(t_gt_op, >).
+comparison_operator_eval(t_lte_op, <=).
+comparison_operator_eval(t_gte_op, >=).
+comparison_operator_eval(t_eq_op, ==).
 
 letter_eval(t_letter('a'), 'a').
 letter_eval(t_letter('b'), 'b').
