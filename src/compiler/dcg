@@ -55,7 +55,7 @@ conditional --> [if, it, be], boolean_expression, [then, thee, shall], statement
 
 ternary --> boolean_expression, ['?'], statement_list, [':'], statement_list, ['.'].
 
-traditional_for --> [forsooth], (assignment | variable_declaration), ['.'], boolean_expression, ['.'], assignment, [doth], statement_list, [end, for].
+traditional_for --> [forsooth], (assignment | variable_declaration), boolean_expression, ['.'], assignment, [doth], statement_list, [end, for].
 
 traditional_while --> [whilst, it, be], boolean_expression, [doth], statement_list, [end, whilst].
 

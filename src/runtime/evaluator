@@ -205,6 +205,7 @@ statement_eval(t_statement(X), Env, Env):- print_eval(X,Env).
 statement_eval(t_statement(X), Env, NewEnv):- conditional_eval(X, Env, NewEnv).
 statement_eval(t_statement(X), Env, NewEnv):- ternary_eval(X, Env, NewEnv).
 statement_eval(t_statement(X), Env, NewEnv):- traditional_while_eval(X, Env, NewEnv).
+statement_eval(t_statement(X), Env, NewEnv):- traditional_for_eval(X, Env, NewEnv).
 
 % Test
 % statement_eval(t_statement(t_var_dec(t_datatype(numeral),t_assign(t_identifier(t_str(t_letter(x),t_char)),t_expr(t_arith_expr_opr(t_arith_term_fac(t_arith_factor(t_dig_num(t_digit(2),t_num_dig(t_digit(1))))),t_add,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(4)))))))))), [], New_env).
@@ -308,10 +309,14 @@ ternary_eval(t_tern(A,B,_), Env, NewEnv):- boolean_expression_eval(A, Env, true)
 ternary_eval(t_tern(A,_,C), Env, NewEnv):- boolean_expression_eval(A, Env, false), statement_list_eval(C, Env, NewEnv).
 
 
-traditional_while_eval(t_while(M,_), Env, NewEnv):- boolean_expression_eval(M, Env, false).
+traditional_while_eval(t_while(M,_), Env, _):- boolean_expression_eval(M, Env, false).
 traditional_while_eval(t_while(M,N), Env, NewEnv):- boolean_expression_eval(M, Env, true), 
-statement_list_eval(N, NewEnv1, NewEnv2), traditional_while_eval(t_while(M,N), NewEnv2, NewEnv).
+statement_list_eval(N, Env, NewEnv1), traditional_while_eval(t_while(M,N), NewEnv1, NewEnv).
 
+for_helper(W, Env, NewEnv):- assignment_eval(W, Env, NewEnv, _) | variable_declaration_eval(W, Env, NewEnv).
+traditional_for_eval(t_for(W,X,_,_), Env, _):- for_helper(W, Env, NewEnv), boolean_expression_eval(X, NewEnv, false).
+traditional_for_eval(t_for(W,X,Y,Z), Env, NewEnv2):- for_helper(W, Env, NewEnv), boolean_expression_eval(X, NewEnv, true),
+statement_list_eval(Z, NewEnv, NewEnv1), traditional_for_eval(t_for(Y,X,Y,Z), NewEnv1,NewEnv2).
 
 % Test
 % string_eval(t_string(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char))))))), X).

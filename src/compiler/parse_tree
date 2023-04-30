@@ -56,7 +56,7 @@ conditional(t_cond(A,B,C)) --> [if, it, be], boolean_expression(A), [then, thee,
 
 ternary(t_tern(A,B,C)) --> boolean_expression(A), ['?'], statement_list(B), [':'], statement_list(C), ['.'].
 
-traditional_for(t_for(W,X,Y,Z)) --> [forsooth], (assignment(W) | variable_declaration(W)), ['.'], boolean_expression(X), ['.'], assignment(Y), [doth], statement_list(Z), [end, for].
+traditional_for(t_for(W,X,Y,Z)) --> [forsooth], (assignment(W) | variable_declaration(W)), boolean_expression(X), ['.'], assignment(Y), [doth], statement_list(Z), [end, for].
 
 traditional_while(t_while(M,N)) --> [whilst, it, be], boolean_expression(M), [doth], statement_list(N), [end, whilst].
 
