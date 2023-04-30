@@ -1,0 +1,5 @@
+act
+    scene
+        let numeral x be 100 - (12 + 4).
+    end scene
+end act

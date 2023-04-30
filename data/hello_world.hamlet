@@ -1,6 +1,6 @@
 act
   scene
-    let verse x be ~hello123world~.
+    let verse x be ~helloworld~.
     sayeth x.
   end scene
 end act
