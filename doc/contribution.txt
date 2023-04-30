@@ -31,10 +31,10 @@ Manoj Dara 		    - for, while and for i in range
 
 Contribution plan for Milestone 2:
 
-- Convert grammar to DCG                - Akshata, Anmol 
+- Convert grammar to DCG                - Akshata, Anmol, Manoj
 - Read from program file and tokenize   - Akansh, Rhishabh
-- Use DCG and get parse tree            - Rhishabh, Manoj
-- Use parse tree and evaluate           - Akshata, Akansh, Manoj
-- Documentation                         - Anmol, Manoj, Rhishabh
+- Use DCG and get parse tree            - Akshata, Anmol
+- Use parse tree and evaluate           - Rhishabh, Akshata, Akansh, Manoj, Anmol
+- Documentation                         - Anmol, Akshata, Rhishabh, Manoj
 - Video                                 - Rhishabh, Anmol, Akshata, Manoj, Akansh
-- Quality Assurance                     - Anmol, Akansh, Akshata
+- Quality Assurance                     - Rhishabh, Akansh

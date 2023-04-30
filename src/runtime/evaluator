@@ -221,9 +221,6 @@ statement_eval(t_statement(X), Env, New_env) :- variable_declaration_eval(X, Env
 % NewEnv = [("x", true)] .
 statement_eval(t_statement(X), Env, New_env) :- assignment_eval(X, Env, New_env, _).
 
-% TODO statement for for
-% TODO statement for while
-% TODO statement for range_for
 % statement_eval(t_statement(X), Env, NewEnv):- traditional_while_eval(X, Env, NewEnv).
 
 statement_eval(t_statement(X), Env, NewEnv) :- for_loop_eval(X, Env, NewEnv).
