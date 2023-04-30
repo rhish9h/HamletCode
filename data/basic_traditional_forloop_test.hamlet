@@ -1,7 +1,7 @@
 act
     scene
-        forsooth a be aye. a. a be aye. doth
-            sayeth ~hellogeek~.
+        forsooth let numeral i be 0. i < 3 . i be i + 1. doth
+            sayeth i.
         end for
     end scene
 end act
