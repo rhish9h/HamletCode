@@ -21,9 +21,14 @@ act_eval(t_act(X), Env, NewEnv):- scene_list_eval(X, Env, NewEnv).
 % X = [("result", 12)] .
 scene_list_eval(t_single_scene_list(X), Env, NewEnv):- scene_declaration_eval(X, Env, NewEnv).
 
-
-% scene_list_eval(t_multi_scene_list(X,Y), Env, NewEnv):- scene_declaration(X, Env, NewEnv1), scene_list(Y, NewEnv1, NewEnv).
-
+% Test
+%scene_list_eval(t_multi_scene_list(t_scene(t_single_stmt_list(t_statement(t_print(t_string(t_str(t_letter(h),t_str_char(t_letter(e),t_str_char(t_letter(l),t_str_char(t_letter(l),t_str_char(t_letter(o),t_str_char(t_letter(w),t_str_char(t_letter(o),t_str_char(t_letter(r),t_str_char(t_letter(l),t_str_char(t_letter(d),t_char))))))))))))))),t_single_scene_list(t_scene(t_single_stmt_list(t_statement(t_print(t_string(t_str(t_letter(h),t_str_char(t_letter(i),t_char))))))))) , [] , X).
+% helloworld
+% hi
+% X = [].
+scene_list_eval(t_multi_scene_list(X, Y), Env, NewEnv) :-
+    scene_declaration_eval(X, Env, NewEnv1),
+    scene_list_eval(Y, NewEnv1, NewEnv).
 
 % Test
 % scene_declaration_eval(t_scene(t_single_stmt_list( t_statement(t_print(t_identifier(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char))))))))))) , [("result" ,12 )] , X ).
@@ -32,7 +37,15 @@ scene_list_eval(t_single_scene_list(X), Env, NewEnv):- scene_declaration_eval(X,
 scene_declaration_eval(t_scene(X) , Env , NewEnv) :- 
     statement_list_eval(X , Env , NewEnv).
 
-% assignment_eval(t_assign(X,Y), Env, NewEnv):- identifier_eval(X), string_eval(Y), update(X,Y,Env, NewEnv).
+
+% Test
+% assignment_eval(t_assign(t_identifier(t_str(t_letter(x),t_char)),t_string(t_str(t_letter(h),t_str_char(t_letter(e),t_str_char(t_letter(l),t_str_char(t_letter(l),t_str_char(t_letter(o),t_char))))))), [("x", "hi")], Y).
+% Y = [("x", "hello")] .
+assignment_eval(t_assign(X,Y), Env, NewEnv):-
+    identifier_eval(X, Id_eval),
+    string_eval(Y, String_eval),
+    update(Id_eval, String_eval, Env, NewEnv).
+
 % assignment_eval(t_assign(X,Y), Env, NewEnv):- identifier_eval(X), expr_eval(Y), update(X,Y,Env, NewEnv).
 
 % Test
@@ -42,6 +55,7 @@ print_eval(t_print(X), Env) :-
     identifier_eval(X, Env, Value),
     writeln(Value).
 
+% Test
 % print_eval(t_print(t_string(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char)))))))), []).
 % result
 print_eval(t_print(X), _) :-
@@ -87,6 +101,25 @@ bool_literal_eval(t_bool(nay),false).
 boolean_expression_eval(t_bool_lit(X), _, _, true):- bool_literal_eval(X, true).
 boolean_expression_eval(t_bool_lit(X), _, _, false):- bool_literal_eval(X, false).
 
+% Test
+% boolean_expression_eval(t_bool_not(t_bool_lit(t_bool(nay))), [], X).
+% true.
+boolean_expression_eval(t_bool_not(X), _, true):- boolean_expression_eval(X,_,false).
+boolean_expression_eval(t_bool_not(X), _, false):-boolean_expression_eval(X,_,true).
+
+% Test
+% boolean_expression_eval(t_bool_and(t_bool(aye),t_bool(aye)), [],X).
+% true.
+boolean_expression_eval(t_bool_and(X,Y), _, true):- bool_literal_eval(X,true),bool_literal_eval(Y,true).
+boolean_expression_eval(t_bool_and(_,_), _, false).
+% TODO: compare identifiers
+
+% Test
+% boolean_expression_eval(t_bool_or(t_bool(nay),t_bool(nay)), [],X).
+% false.
+boolean_expression_eval(t_bool_or(X,Y), _, false):- bool_literal_eval(X,false),bool_literal_eval(Y,false).
+boolean_expression_eval(t_bool_or(_,_), _, true).
+
 % conditional_eval(t_cond(A,B,_), Env, NewEnv):- boolean_expression_eval(A, Env, NewEnv1, true), statement_list_eval(B, NewEnv1, NewEnv).
 % conditional_eval(t_cond(A,_,C), Env, NewEnv):- boolean_expression_eval(A, Env, NewEnv1, false), statement_list_eval(C, NewEnv1, NewEnv).
 
@@ -95,7 +128,7 @@ boolean_expression_eval(t_bool_lit(X), _, _, false):- bool_literal_eval(X, false
 
 % traditional_while_eval(t_while(M,_), Env, NewEnv):- boolean_expression_eval(M, Env, NewEnv, false).
 % traditional_while_eval(t_while(M,N), Env, NewEnv):- boolean_expression_eval(M, Env, NewEnv1, true), 
-    % statement_list_eval(N, NewEnv1, NewEnv2), traditional_while_eval(M,N, NewEnv2, NewEnv).
+%     statement_list_eval(N, NewEnv1, NewEnv2), traditional_while_eval(M,N, NewEnv2, NewEnv).
 
 
 % Test
