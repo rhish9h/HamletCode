@@ -215,6 +215,9 @@ bool_literal_eval(t_bool(nay),false).
 boolean_expression_eval(t_bool_lit(X),  _, true):- bool_literal_eval(X, true).
 boolean_expression_eval(t_bool_lit(X),  _, false):- bool_literal_eval(X, false).
 
+boolean_expression_eval(t_bool_lit(X),  Env, true):- identifier_eval(X, Env, Val), Val=true.
+boolean_expression_eval(t_bool_lit(X),  Env, false):- identifier_eval(X, Env, Val), Val=false.
+
 % Test
 % boolean_expression_eval(t_bool_lit(t_comp(t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(5))))),t_gt_op,t_arith_expr_term(t_arith_term_fac(t_arith_factor(t_num_dig(t_digit(3))))))), [], R).
 % R = true .
