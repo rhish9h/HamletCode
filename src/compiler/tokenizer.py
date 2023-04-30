@@ -35,7 +35,7 @@ class Tokenizer:
                 self.tokens.append(("BOOL_LITERAL", word))
             # Check for numbers
             elif re.match(r"^\d+$", word):
-                for ch in word:
+                for ch in reversed(word):
                     self.tokens.append(("NUMBER", ch))
             # Check for strings
             elif re.match(r'^\~[a-zA-Z0-9\s]+\~$', word):

@@ -211,6 +211,25 @@ string_chars_eval(t_str_char(X,Y), Z_out) :-
     string_chars_eval(Y, String_eval),
     string_concat(Letter_eval, String_eval, Z_out).
 
+% Test
+% number_eval(t_num, V).
+% V = 0.
+number_eval(t_num, 0).
+
+% Test
+% number_eval(t_num_dig(t_digit(1)), V).
+% V = 1.
+number_eval(t_num_dig(X), Value) :-
+    digit_eval(X, Value).
+
+% Test
+% number_eval(t_dig_num(t_digit(1),t_dig_num(t_digit(2),t_dig_num(t_digit(6),t_dig_num(t_digit(5),t_num_dig(t_digit(1)))))), V).
+% V = 15621.
+number_eval(t_dig_num(X,Y), Value) :-
+    digit_eval(X, Digit_eval),
+    number_eval(Y, Number_eval),
+    Value is Digit_eval + 10 * Number_eval.
+
 letter_eval(t_letter('a'), 'a').
 letter_eval(t_letter('b'), 'b').
 letter_eval(t_letter('c'), 'c').
