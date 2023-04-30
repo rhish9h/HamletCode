@@ -1,0 +1,5 @@
+act
+  scene
+    x be ~hello~.
+  end scene
+end act

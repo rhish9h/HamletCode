@@ -37,7 +37,15 @@ scene_list_eval(t_multi_scene_list(X, Y), Env, NewEnv) :-
 scene_declaration_eval(t_scene(X) , Env , NewEnv) :- 
     statement_list_eval(X , Env , NewEnv).
 
-% assignment_eval(t_assign(X,Y), Env, NewEnv):- identifier_eval(X), string_eval(Y), update(X,Y,Env, NewEnv).
+
+% Test
+% assignment_eval(t_assign(t_identifier(t_str(t_letter(x),t_char)),t_string(t_str(t_letter(h),t_str_char(t_letter(e),t_str_char(t_letter(l),t_str_char(t_letter(l),t_str_char(t_letter(o),t_char))))))), [("x", "hi")], Y).
+% Y = [("x", "hello")] .
+assignment_eval(t_assign(X,Y), Env, NewEnv):-
+    identifier_eval(X, Id_eval),
+    string_eval(Y, String_eval),
+    update(Id_eval, String_eval, Env, NewEnv).
+
 % assignment_eval(t_assign(X,Y), Env, NewEnv):- identifier_eval(X), expr_eval(Y), update(X,Y,Env, NewEnv).
 
 % Test
@@ -47,6 +55,7 @@ print_eval(t_print(X), Env) :-
     identifier_eval(X, Env, Value),
     writeln(Value).
 
+% Test
 % print_eval(t_print(t_string(t_str(t_letter(r),t_str_char(t_letter(e),t_str_char(t_letter(s),t_str_char(t_letter(u),t_str_char(t_letter(l),t_str_char(t_letter(t),t_char)))))))), []).
 % result
 print_eval(t_print(X), _) :-
@@ -115,7 +124,7 @@ boolean_expression_eval(t_bool_or(_,_), _, true).
 
 % traditional_while_eval(t_while(M,_), Env, NewEnv):- boolean_expression_eval(M, Env, NewEnv, false).
 % traditional_while_eval(t_while(M,N), Env, NewEnv):- boolean_expression_eval(M, Env, NewEnv1, true), 
-    % statement_list_eval(N, NewEnv1, NewEnv2), traditional_while_eval(M,N, NewEnv2, NewEnv).
+%     statement_list_eval(N, NewEnv1, NewEnv2), traditional_while_eval(M,N, NewEnv2, NewEnv).
 
 
 % Test
