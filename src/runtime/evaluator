@@ -37,11 +37,24 @@ scene_list_eval(t_multi_scene_list(X, Y), Env, NewEnv) :-
 scene_declaration_eval(t_scene(X) , Env , NewEnv) :- 
     statement_list_eval(X , Env , NewEnv).
 
+% TODO :- variable declaration for bool and numeral
+% t_var_dec(t_datatype(verse),t_assign(t_identifier(t_str(t_letter(x),t_char)),t_string(t_str(t_letter(h),t_str_char(t_letter(e),t_str_char(t_letter(l),t_str_char(t_letter(l),t_str_char(t_letter(o),t_char))))))))
+variable_declaration_eval(t_var_dec(X,Y), Env, NewEnv) :-
+    datatype_eval(X, verse),
+    assignment_eval(Y, Env, NewEnv, String_eval),
+    string(String_eval).
 
 % Test
-% assignment_eval(t_assign(t_identifier(t_str(t_letter(x),t_char)),t_string(t_str(t_letter(h),t_str_char(t_letter(e),t_str_char(t_letter(l),t_str_char(t_letter(l),t_str_char(t_letter(o),t_char))))))), [("x", "hi")], Y).
+% datatype_eval(t_datatype(numeral), X).
+% X = numeral.
+datatype_eval(t_datatype(numeral), numeral).
+datatype_eval(t_datatype(verse), verse).
+datatype_eval(t_datatype(bool), bool).
+
+% Test
+% assignment_eval(t_assign(t_identifier(t_str(t_letter(x),t_char)),t_string(t_str(t_letter(h),t_str_char(t_letter(e),t_str_char(t_letter(l),t_str_char(t_letter(l),t_str_char(t_letter(o),t_char))))))), [("x", "hi")], Y, Z).
 % Y = [("x", "hello")] .
-assignment_eval(t_assign(X,Y), Env, NewEnv):-
+assignment_eval(t_assign(X,Y), Env, NewEnv, String_eval):-
     identifier_eval(X, Id_eval),
     string_eval(Y, String_eval),
     update(Id_eval, String_eval, Env, NewEnv).
