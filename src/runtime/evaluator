@@ -236,7 +236,10 @@ boolean_expression_eval(t_bool_lit(X),  Env, false):- identifier_eval(X, Env, Va
 boolean_expression_eval(t_bool_lit(X), Env, Value) :-
     comparison_eval(X, Env, Value).
 
-% TODO boolean expression with brackets
+% boolean_expression_eval(t_bool_expr(t_bool_and(t_bool(aye),t_bool(nay))),[],R).
+% R = false .
+boolean_expression_eval(t_bool_expr(X), Env, Value):-
+    boolean_expression_eval(X, Env, Value).
 
 % Test
 % boolean_expression_eval(t_bool_not(t_bool_lit(t_bool(nay))), [], X).
