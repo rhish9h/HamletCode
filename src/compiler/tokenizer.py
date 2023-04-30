@@ -5,7 +5,7 @@ import sys
 class Tokenizer:
     tokens = []
     keywords = ["act", "scene", "end", "numeral", "verse", "bool", "sayeth", "if", "then", "for", "it",
-                "otherwise", "forsooth", "doth", "whilst", "to", "by", "step", "size", "of", "let", "be"]
+                "otherwise", "forsooth", "doth", "whilst", "to", "by", "step", "size", "of", "let", "be", "thee", "shall"]
     operators = ["+", "-", "*", "/", "<", ">", "<=", ">=", "==", "and", "or", "not"]
     delimiters = [",", ".", "(", ")", ":", "?"]
     program = ""
@@ -15,7 +15,7 @@ class Tokenizer:
 
     def tokenize(self):
         # Split the input code by whitespace, new lines, digits, identifiers, strings, and new lines
-        tokens = re.findall(r'~.*?~|\b(?:act|scene|end|numeral|verse|bool|sayeth|if|then|for|it|otherwise|forsooth|doth|whilst|to|by|step|size|of|let|be|aye|nay|and|or|not|)\b|[-+*/<>=]+|\w+|[.,():?]|[\n\r]+', self.program)
+        tokens = re.findall(r'~.*?~|\b(?:act|scene|end|numeral|verse|bool|sayeth|if|then|for|it|otherwise|forsooth|doth|whilst|to|by|step|size|of|let|be|thee|shall|aye|nay|and|or|not|)\b|[-+*/<>=]+|\w+|[.,():?]|[\n\r]+', self.program)
 
         # Iterate through each word in the program
         for word in tokens:
